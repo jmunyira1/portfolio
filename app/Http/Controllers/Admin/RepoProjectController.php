@@ -108,7 +108,9 @@ class RepoProjectController extends Controller
 
     protected function guardSlug(string $slug): void
     {
-        abort_if(str_contains($slug, ['..', '/', '\\']), 404);
+        abort_if(str_contains($slug, '..'), 404);
+        abort_if(str_contains($slug, '/'), 404);
+        abort_if(str_contains($slug, '\\'), 404);
         abort_if($slug === 'portfolio', 404);
     }
 
