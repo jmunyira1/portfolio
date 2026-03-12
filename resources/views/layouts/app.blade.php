@@ -82,29 +82,28 @@
 {{-- ── End Page Content ── --}}
 
 
-{{-- ── Footer ── --}}
 <footer class="border-top py-4 mt-4">
     <div class="container-lg d-flex align-items-center justify-content-between flex-wrap gap-3">
-            <span class="text-muted fs-13">
-                &copy; {{ date('Y') }} {{ \App\Models\Setting::get('name', 'Portfolio') }}
-            </span>
-        <div class="d-flex gap-3">
+        <span class="text-muted fs-13">
+            &copy; {{ date('Y') }} {{ \App\Models\Setting::get('name', 'Portfolio') }}
+        </span>
+        <div class="d-flex gap-2">
             @foreach(\App\Models\Social::orderByDesc('is_primary')->get() as $social)
                 <a href="{{ $social->url }}"
                    target="{{ str_starts_with($social->url, 'http') ? '_blank' : '_self' }}"
                    title="{{ $social->label }}"
-                   class="text-muted text-decoration-none fs-18">
+                   class="text-body text-decoration-none border rounded-circle d-flex align-items-center justify-content-center"
+                   style="width:34px;height:34px">
                     @if($social->icon)
-                        <i class="{{ $social->icon }}"></i>
+                        <i class="{{ $social->icon }} fs-16"></i>
                     @else
-                        <span class="fs-13">{{ $social->label }}</span>
+                        <span class="fs-11">{{ $social->label }}</span>
                     @endif
                 </a>
             @endforeach
         </div>
     </div>
 </footer>
-{{-- ── End Footer ── --}}
 
 
 <script src="{{ asset('assets/js/vendor.min.js') }}"></script>

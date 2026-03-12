@@ -58,7 +58,7 @@
                         <a href="{{ $social->url }}" target="_blank"
                            title="{{ $social->label }}"
                            class="text-body text-decoration-none border rounded-circle d-flex align-items-center justify-content-center"
-                           style="width:40px;height:40px">
+                           style="width:42px;height:42px">
                             @if($social->icon)
                                 <i class="{{ $social->icon }} fs-20"></i>
                             @else
