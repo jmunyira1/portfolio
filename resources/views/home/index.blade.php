@@ -192,45 +192,51 @@
         </script>
     @endpush
     {{-- ── Skills ───────────────────────────────────────────────── --}}
+    {{-- ── Skills ───────────────────────────────────────────────── --}}
     <section id="skills" class="py-5 border-top">
 
-        <h2 class="fs-11 fw-semibold text-uppercase text-muted letter-spacing-1 mb-4">
-            Skills
-        </h2>
+        <h2 class="fs-11 fw-semibold text-uppercase text-muted letter-spacing-1 mb-4">Skills</h2>
 
-        @foreach($categories as $category)
-            <div class="mb-4">
-                <p class="fs-13 fw-semibold mb-3">
-                    @if($category->icon)
-                        <i class="{{ $category->icon }} me-1"></i>
-                    @endif
-                    {{ $category->name }}
-                </p>
+        <div class="row g-3">
+            @foreach($categories as $category)
+                <div class="col-sm-6 col-xl-4">
+                    <div class="border rounded p-3 h-100">
 
-                @foreach($category->skills as $skill)
-                    <div class="mb-3">
-                        <div class="d-flex justify-content-between mb-1">
-                <span class="fs-13">
-                    @if($skill->icon)
-                        <i class="{{ $skill->icon }} me-1"></i>
-                    @endif
-                    {{ $skill->name }}
-                </span>
-                            <span class="fs-12 text-muted">{{ $skill->proficiency }}%</span>
-                        </div>
-                        <div class="progress" style="height:3px">
-                            <div class="progress-bar bg-dark"
-                                 role="progressbar"
-                                 style="width:{{ $skill->proficiency }}%">
+                        {{-- Category header --}}
+                        <p class="fw-semibold fs-13 mb-3">
+                            @if($category->icon)
+                                <i class="{{ $category->icon }} me-1 text-muted"></i>
+                            @endif
+                            {{ $category->name }}
+                        </p>
+
+                        {{-- Skills list --}}
+                        @foreach($category->skills as $skill)
+                            <div class="mb-2">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="fs-12 d-flex align-items-center gap-1">
+                            @if($skill->icon)
+                                <i class="{{ $skill->icon }} text-muted"></i>
+                            @endif
+                            {{ $skill->name }}
+                        </span>
+                                    <span class="fs-11 text-muted">{{ $skill->proficiency }}%</span>
+                                </div>
+                                <div class="progress" style="height:2px">
+                                    <div class="progress-bar bg-dark"
+                                         role="progressbar"
+                                         style="width:{{ $skill->proficiency }}%">
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        @endforeach
+
                     </div>
-                @endforeach
-            </div>
-        @endforeach
+                </div>
+            @endforeach
+        </div>
 
     </section>
-
 
     {{-- ── Education & Experience ───────────────────────────────── --}}
     <section id="experience" class="py-5 border-top">
