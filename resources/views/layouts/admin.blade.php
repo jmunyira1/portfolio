@@ -37,6 +37,7 @@
         <div data-simplebar>
             <ul class="side-nav">
 
+                {{-- Main --}}
                 <li class="side-nav-title mt-2">Main</li>
 
                 <li class="side-nav-item">
@@ -46,6 +47,46 @@
                         <span class="menu-text">Dashboard</span>
                     </a>
                 </li>
+
+                {{-- Skills --}}
+                <li class="side-nav-title mt-2">Skills</li>
+
+                <li class="side-nav-item">
+                    <a href="{{ route('admin.skill-categories.index') }}"
+                       class="side-nav-link {{ request()->routeIs('admin.skill-categories.*') ? 'active' : '' }}">
+                        <span class="menu-icon"><i class="ti ti-category"></i></span>
+                        <span class="menu-text">Categories</span>
+                    </a>
+                </li>
+
+                <li class="side-nav-item">
+                    <a href="{{ route('admin.skills.index') }}"
+                       class="side-nav-link {{ request()->routeIs('admin.skills.*') ? 'active' : '' }}">
+                        <span class="menu-icon"><i class="ti ti-bulb"></i></span>
+                        <span class="menu-text">Skills</span>
+                    </a>
+                </li>
+
+                {{-- Portfolio --}}
+                <li class="side-nav-title mt-2">Portfolio</li>
+
+                <li class="side-nav-item">
+                    <a href="{{ route('admin.repo-projects.index') }}"
+                       class="side-nav-link {{ request()->routeIs('admin.repo-projects.*') ? 'active' : '' }}">
+                        <span class="menu-icon"><i class="ti ti-git-branch"></i></span>
+                        <span class="menu-text">Software Projects</span>
+                    </a>
+                </li>
+
+                <li class="side-nav-item">
+                    <a href="{{ route('admin.projects.index') }}"
+                       class="side-nav-link {{ request()->routeIs('admin.projects.*') ? 'active' : '' }}">
+                        <span class="menu-icon"><i class="ti ti-layout-grid"></i></span>
+                        <span class="menu-text">Technical Projects</span>
+                    </a>
+                </li>
+
+                {{-- Background --}}
                 <li class="side-nav-title mt-2">Background</li>
 
                 <li class="side-nav-item">
@@ -71,48 +112,8 @@
                         <span class="menu-text">Clients</span>
                     </a>
                 </li>
-                <li class="side-nav-title mt-2">Skills</li>
 
-                <li class="side-nav-item">
-                    <a href="{{ route('admin.skill-categories.index') }}"
-                       class="side-nav-link {{ request()->routeIs('admin.skill-categories.*') ? 'active' : '' }}">
-                        <span class="menu-icon"><i class="ti ti-category"></i></span>
-                        <span class="menu-text">Categories</span>
-                    </a>
-                </li>
-
-                <li class="side-nav-item">
-                    <a href="{{ route('admin.skills.index') }}"
-                       class="side-nav-link {{ request()->routeIs('admin.skills.*') ? 'active' : '' }}">
-                        <span class="menu-icon"><i class="ti ti-bulb"></i></span>
-                        <span class="menu-text">Skills</span>
-                    </a>
-                </li>
-                <li class="side-nav-title mt-2">Portfolio</li>
-
-                <li class="side-nav-item">
-                    <a href="{{ route('admin.projects.index') }}"
-                       class="side-nav-link {{ request()->routeIs('admin.projects.*') ? 'active' : '' }}">
-                        <span class="menu-icon"><i class="ti ti-layout-grid"></i></span>
-                        <span class="menu-text">Projects</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.repo-projects.*') ? 'active' : '' }}"
-                       href="{{ route('admin.repo-projects.index') }}">
-                        <i class="ti ti-git-branch me-1"></i> Software Projects
-                    </a>
-                </li>
-                <li class="side-nav-title mt-2">Settings</li>
-
-                <li class="side-nav-item">
-                    <a href="{{ route('admin.settings.index') }}"
-                       class="side-nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
-                        <span class="menu-icon"><i class="ti ti-settings"></i></span>
-                        <span class="menu-text">Site Settings</span>
-                    </a>
-                </li>
+                {{-- Settings --}}
                 <li class="side-nav-title mt-2">Settings</li>
 
                 <li class="side-nav-item">
@@ -154,14 +155,12 @@
 
             <div class="d-flex align-items-center gap-2">
 
-                {{-- Light/Dark toggle --}}
                 <div class="topbar-item d-none d-sm-flex">
                     <button class="topbar-link btn btn-outline-primary btn-icon" id="light-dark-mode" type="button">
                         <i class="ti ti-moon fs-22"></i>
                     </button>
                 </div>
 
-                {{-- User dropdown --}}
                 <div class="topbar-item">
                     <div class="dropdown">
                         <a class="topbar-link btn btn-outline-primary dropdown-toggle drop-arrow-none"
@@ -176,6 +175,11 @@
                                 <h6 class="text-overflow m-0">{{ auth()->user()->name }}</h6>
                                 <small class="text-muted">{{ auth()->user()->email }}</small>
                             </div>
+                            <div class="dropdown-divider"></div>
+                            <a href="{{ route('home') }}" target="_blank" class="dropdown-item">
+                                <i class="ti ti-external-link me-1 fs-17 align-middle"></i>
+                                View Site
+                            </a>
                             <div class="dropdown-divider"></div>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -198,7 +202,6 @@
     <div class="page-content">
         <div class="page-container">
 
-            {{-- Page title / breadcrumb --}}
             <div class="page-title-head d-flex align-items-sm-center flex-sm-row flex-column gap-2 mb-3">
                 <div class="flex-grow-1">
                     <h4 class="fs-18 text-uppercase fw-bold mb-0">@yield('page-title')</h4>
@@ -211,7 +214,6 @@
                 </div>
             </div>
 
-            {{-- Flash messages --}}
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}
@@ -226,7 +228,6 @@
                 </div>
             @endif
 
-            {{-- Main slot --}}
             @yield('content')
 
         </div>
