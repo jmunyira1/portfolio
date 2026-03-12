@@ -20,7 +20,7 @@
 
 {{-- ── Navbar ── --}}
 <nav class="navbar navbar-expand-md py-3 border-bottom mb-5">
-    <div class="container" style="max-width:720px">
+    <div class="container-lg">
 
         <a class="navbar-brand d-flex align-items-center gap-2 fw-semibold p-0" href="{{ route('home') }}">
             @php $avatar = \App\Models\Setting::get('avatar'); @endphp
@@ -75,7 +75,7 @@
 
 
 {{-- ── Page Content ── --}}
-<div class="container pb-5" style="max-width:720px">
+<div class="container-lg pb-5">
     @yield('content')
 </div>
 {{-- ── End Page Content ── --}}
@@ -83,7 +83,7 @@
 
 {{-- ── Footer ── --}}
 <footer class="border-top py-4 mt-4">
-    <div class="container d-flex align-items-center justify-content-between flex-wrap gap-3" style="max-width:720px">
+    <div class="container-lg d-flex align-items-center justify-content-between flex-wrap gap-3">
             <span class="text-muted fs-13">
                 &copy; {{ date('Y') }} {{ \App\Models\Setting::get('name', 'Portfolio') }}
             </span>
