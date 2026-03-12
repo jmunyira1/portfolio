@@ -98,41 +98,12 @@
                     </a>
                 </li>
 
-                <li class="side-nav-title mt-2">Portfolio</li>
-
-                <li class="side-nav-item">
-                    <a href=""
-                       class="side-nav-link {{ request()->routeIs('admin.projects.*') ? 'active' : '' }}">
-                        <span class="menu-icon"><i class="ti ti-layout-grid"></i></span>
-                        <span class="menu-text">Projects</span>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.repo-projects.*') ? 'active' : '' }}"
+                       href="{{ route('admin.repo-projects.index') }}">
+                        <i class="ti ti-git-branch me-1"></i> Software Projects
                     </a>
                 </li>
-
-                <li class="side-nav-item">
-                    <a href=""
-                       class="side-nav-link {{ request()->routeIs('admin.skills.*') ? 'active' : '' }}">
-                        <span class="menu-icon"><i class="ti ti-bulb"></i></span>
-                        <span class="menu-text">Skills</span>
-                    </a>
-                </li>
-
-                <li class="side-nav-item">
-                    <a href=""
-                       class="side-nav-link {{ request()->routeIs('admin.posts.*') ? 'active' : '' }}">
-                        <span class="menu-icon"><i class="ti ti-news"></i></span>
-                        <span class="menu-text">Blog Posts</span>
-                    </a>
-                </li>
-
-                <li class="side-nav-item">
-                    <a href=""
-                       class="side-nav-link {{ request()->routeIs('admin.messages.*') ? 'active' : '' }}">
-                        <span class="menu-icon"><i class="ti ti-mail"></i></span>
-                        <span class="menu-text">Messages</span>
-                        {{-- unread badge --}}
-                    </a>
-                </li>
-
                 <li class="side-nav-title mt-2">Settings</li>
 
                 <li class="side-nav-item">

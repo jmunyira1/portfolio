@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EducationController;
 use App\Http\Controllers\Admin\ExperienceController;
 use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\RepoProjectController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SkillCategoryController;
 use App\Http\Controllers\Admin\SkillController;
@@ -53,8 +54,16 @@ Route::prefix('admin')
         Route::resource('projects', ProjectController::class);
         Route::delete('project-images/{image}', [ProjectController::class, 'destroyImage'])
             ->name('project-images.destroy');
+        Route::get('repo-projects', [RepoProjectController::class, 'index'])->name('repo-projects.index');
+        Route::get('repo-projects/{slug}/edit', [RepoProjectController::class, 'edit'])->name('repo-projects.edit');
+        Route::put('repo-projects/{slug}', [RepoProjectController::class, 'update'])->name('repo-projects.update');
+        Route::post('repo-projects/{slug}/screenshots', [RepoProjectController::class, 'uploadScreenshots'])->name('repo-projects.screenshots.upload');
+        Route::delete('repo-projects/{slug}/screenshots', [RepoProjectController::class, 'destroyScreenshot'])->name('repo-projects.screenshots.destroy');
 
     });
+
+
+// Repo projects (software — filesystem based)
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
