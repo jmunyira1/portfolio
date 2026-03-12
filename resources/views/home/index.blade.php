@@ -70,6 +70,7 @@
 
     {{-- ── Projects ─────────────────────────────────────────────── --}}
     {{-- ── Projects ─────────────────────────────────────────────── --}}
+    {{-- ── Projects ─────────────────────────────────────────────── --}}
     <section id="projects" class="py-5 border-top">
 
         <h2 class="fs-11 fw-semibold text-uppercase text-muted letter-spacing-1 mb-4">Projects</h2>
@@ -89,66 +90,69 @@
 
         <div class="row g-3" id="projects-grid">
             @forelse($projects as $project)
-                <div class="col-12 col-lg-6 col-xl-4 proj-item"
-                     data-type="{{ $project->is_software ? 'software' : 'technical' }}">
+                @php
+                    $isSoftware = $project['source'] === 'repo';
+                    $type       = $isSoftware ? 'software' : 'technical';
+                @endphp
+                <div class="col-12 col-lg-6 col-xl-4 proj-item" data-type="{{ $type }}">
 
                     <div class="border rounded p-3 h-100 d-flex flex-column">
 
                         {{-- Cover image --}}
-                        @if($project->coverImage)
-                            <a href="{{ route('projects.show', $project->slug) }}"
+                        @if(!empty($project['cover']))
+                            <a href="{{ route('projects.show', $project['slug']) }}"
                                class="d-block rounded overflow-hidden mb-3">
-                                <img src="{{ asset('storage/' . $project->coverImage->path) }}"
-                                     alt="{{ $project->title }}"
+                                <img src="{{ $project['cover'] }}"
+                                     alt="{{ $project['title'] }}"
                                      class="w-100 object-fit-cover rounded"
                                      style="height:160px">
                             </a>
                         @endif
 
-                        {{-- Title row --}}
+                        {{-- Title + type badge --}}
                         <div class="d-flex align-items-start justify-content-between gap-2 mb-1">
-                            <a href="{{ route('projects.show', $project->slug) }}"
+                            <a href="{{ route('projects.show', $project['slug']) }}"
                                class="fw-semibold text-body text-decoration-none fs-15 lh-sm">
-                                {{ $project->title }}
+                                {{ $project['title'] }}
                             </a>
                             <span class="badge bg-light text-muted border fw-normal fs-11 flex-shrink-0">
-                        {{ $project->is_software ? 'Software' : 'Technical' }}
+                        {{ $isSoftware ? 'Software' : 'Technical' }}
                     </span>
                         </div>
 
                         {{-- Summary --}}
                         <p class="text-muted fs-13 mb-2 flex-grow-1">
-                            {{ Str::limit($project->summary, 100) }}
+                            {{ Str::limit($project['summary'], 100) }}
                         </p>
 
-                        {{-- Skills --}}
-                        @if($project->skills->count())
+                        {{-- Tech tags --}}
+                        @if(!empty($project['tech']))
                             <div class="d-flex flex-wrap gap-1 mb-3">
-                                @foreach($project->skills->take(4) as $skill)
-                                    <span
-                                        class="badge bg-light text-muted border fw-normal fs-11">{{ $skill->name }}</span>
+                                @foreach(array_slice($project['tech'], 0, 4) as $tech)
+                                    <span class="badge bg-light text-muted border fw-normal fs-11">{{ $tech }}</span>
                                 @endforeach
-                                @if($project->skills->count() > 4)
-                                    <span
-                                        class="badge bg-light text-muted border fw-normal fs-11">+{{ $project->skills->count() - 4 }}</span>
+                                @if(count($project['tech']) > 4)
+                                    <span class="badge bg-light text-muted border fw-normal fs-11">
+                        +{{ count($project['tech']) - 4 }}
+                    </span>
                                 @endif
                             </div>
                         @endif
 
                         {{-- Links --}}
                         <div class="d-flex gap-2 mt-auto">
-                            <a href="{{ route('projects.show', $project->slug) }}"
+                            <a href="{{ route('projects.show', $project['slug']) }}"
                                class="btn btn-dark btn-sm px-3 fs-12">
                                 View project
                             </a>
-                            @if($project->url)
-                                <a href="{{ $project->url }}" target="_blank"
+                            @if(!empty($project['live_url']))
+                                <a href="{{ $project['live_url'] }}" target="_blank"
                                    class="btn btn-outline-secondary btn-sm px-3 fs-12">
                                     Live <i class="ti ti-arrow-up-right fs-11"></i>
                                 </a>
                             @endif
-                            @if($project->github_url)
-                                <a href="{{ $project->github_url }}" target="_blank"
+                            @if(!empty($project['github_url']))
+                                <a href="{{ $project['github_url'] }}" target="_blank"
                                    class="btn btn-outline-secondary btn-sm px-3 fs-12">
                                     GitHub <i class="ti ti-arrow-up-right fs-11"></i>
                                 </a>
@@ -165,7 +169,6 @@
         </div>
 
     </section>
-
     @push('scripts')
         <script>
             const filterBtns = document.querySelectorAll('.proj-filter');
