@@ -52,20 +52,19 @@
                 </div>
 
                 {{-- Social icons --}}
-                <div class="d-flex gap-3">
+                <div class="d-flex gap-4 justify-content-center justify-content-lg-start mt-3">
                     @foreach($socials->where('is_primary', false) as $social)
                         <a href="{{ $social->url }}" target="_blank"
                            title="{{ $social->label }}"
-                           class="text-muted text-decoration-none fs-18 link-body-emphasis">
+                           class="text-body text-decoration-none fs-24">
                             @if($social->icon)
                                 <i class="{{ $social->icon }}"></i>
                             @else
-                                <span class="fs-13">{{ $social->label }}</span>
+                                <span class="fs-14">{{ $social->label }}</span>
                             @endif
                         </a>
                     @endforeach
                 </div>
-
             </div>
 
             {{-- Right — avatar --}}

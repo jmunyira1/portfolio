@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ContactMail;
-use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -18,9 +17,7 @@ class ContactController extends Controller
             'message' => 'required|string|min:10',
         ]);
 
-        $to = Setting::get('contact_email', config('mail.from.address'));
-
-        Mail::to($to)->send(new ContactMail($request->all()));
+        Mail::to('munyira@munyira.co.ke')->send(new ContactMail($request->all()));
 
         return back()->with('success', 'Your message has been sent. I\'ll get back to you soon!');
     }
