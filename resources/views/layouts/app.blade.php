@@ -2,7 +2,7 @@
 <html lang="en" data-bs-theme="light">
 <head>
     <meta charset="utf-8"/>
-    <title>@yield('title', 'Your Name') | Full-Stack Developer</title>
+    <title>@yield('title', 'Munyira Joseph')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="@yield('meta_description', 'Full-stack developer portfolio')">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -19,58 +19,51 @@
 <body>
 
 {{-- ── Navbar ── --}}
-<nav class="navbar navbar-expand-lg sticky-top bg-white border-bottom">
-    <div class="container">
+<nav class="navbar navbar-expand-md py-3 border-bottom mb-5">
+    <div class="container" style="max-width:720px">
 
-        <a class="navbar-brand fw-bold fs-20" href="{{ route('home') }}">
+        <a class="navbar-brand d-flex align-items-center gap-2 fw-semibold p-0" href="{{ route('home') }}">
+            @php $avatar = \App\Models\Setting::get('avatar'); @endphp
+            @if($avatar)
+                <img src="{{ asset('storage/' . $avatar) }}"
+                     alt="{{ \App\Models\Setting::get('name') }}"
+                     width="32" height="32"
+                     class="rounded-circle object-fit-cover">
+            @endif
             {{ \App\Models\Setting::get('name', 'Portfolio') }}
         </a>
 
-        <div class="d-flex align-items-center gap-2 d-lg-none">
-            {{-- Dark mode toggle (mobile) --}}
-            <button class="btn btn-outline-secondary btn-sm" id="theme-toggle-mobile">
-                <i class="ti ti-moon" id="theme-icon-mobile"></i>
-            </button>
-            <button class="navbar-toggler border-0" type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarNav">
-                <i class="ti ti-menu-2 fs-22"></i>
-            </button>
-        </div>
+        <button class="navbar-toggler border-0 shadow-none" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <i class="ti ti-menu-2 fs-20"></i>
+        </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+            <ul class="navbar-nav ms-auto align-items-md-center gap-md-1">
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('home') ? 'active fw-semibold' : '' }}"
-                       href="{{ route('home') }}">Home</a>
+                    <a class="nav-link text-muted py-1" href="{{ route('home') }}#projects">Projects</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}#projects">Projects</a>
+                    <a class="nav-link text-muted py-1" href="{{ route('home') }}#skills">Skills</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}#skills">Skills</a>
+                    <a class="nav-link text-muted py-1" href="{{ route('home') }}#experience">Experience</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}#experience">Experience</a>
+                    <a class="nav-link text-muted py-1" href="{{ route('home') }}#contact">Contact</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}#contact">Contact</a>
-                </li>
-
                 @if(\App\Models\Setting::get('resume_path'))
-                    <li class="nav-item ms-lg-2">
-                        <a class="btn btn-outline-dark btn-sm"
+                    <li class="nav-item">
+                        <a class="nav-link text-muted py-1"
                            href="{{ asset(\App\Models\Setting::get('resume_path')) }}"
                            target="_blank">
-                            <i class="ti ti-download me-1"></i> Resume
+                            Resume <i class="ti ti-arrow-up-right fs-12"></i>
                         </a>
                     </li>
                 @endif
-
-                {{-- Dark mode toggle (desktop) --}}
-                <li class="nav-item ms-lg-1 d-none d-lg-flex">
-                    <button class="btn btn-outline-secondary btn-sm" id="theme-toggle-desktop">
-                        <i class="ti ti-moon" id="theme-icon-desktop"></i>
+                <li class="nav-item ms-md-2">
+                    <button class="btn btn-link text-muted p-0 shadow-none" id="theme-toggle">
+                        <i class="ti ti-moon fs-18" id="theme-icon"></i>
                     </button>
                 </li>
             </ul>
@@ -82,36 +75,31 @@
 
 
 {{-- ── Page Content ── --}}
-@yield('content')
+<div class="container pb-5" style="max-width:720px">
+    @yield('content')
+</div>
 {{-- ── End Page Content ── --}}
 
 
 {{-- ── Footer ── --}}
-<footer class="border-top py-4 mt-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-6 text-center text-md-start mb-2 mb-md-0">
-                <span class="fw-semibold">{{ \App\Models\Setting::get('name', 'Portfolio') }}</span>
-                <span class="text-muted ms-2 fs-13">Full-Stack Developer</span>
-            </div>
-            <div class="col-md-6 text-center text-md-end">
-                @foreach(\App\Models\Social::orderByDesc('is_primary')->get() as $social)
-                    <a href="{{ $social->url }}"
-                       class="text-muted me-3 text-decoration-none fs-13"
-                       target="{{ str_starts_with($social->url, 'http') ? '_blank' : '_self' }}"
-                       title="{{ $social->label }}">
-                        @if($social->icon)
-                            <i class="{{ $social->icon }}"></i>
-                        @else
-                            {{ $social->label }}
-                        @endif
-                    </a>
-                @endforeach
-            </div>
-        </div>
-        <hr class="my-3">
-        <div class="text-center text-muted fs-12">
-            &copy; {{ date('Y') }} {{ \App\Models\Setting::get('name', 'Portfolio') }}. All rights reserved.
+<footer class="border-top py-4 mt-4">
+    <div class="container d-flex align-items-center justify-content-between flex-wrap gap-3" style="max-width:720px">
+            <span class="text-muted fs-13">
+                &copy; {{ date('Y') }} {{ \App\Models\Setting::get('name', 'Portfolio') }}
+            </span>
+        <div class="d-flex gap-3">
+            @foreach(\App\Models\Social::orderByDesc('is_primary')->get() as $social)
+                <a href="{{ $social->url }}"
+                   target="{{ str_starts_with($social->url, 'http') ? '_blank' : '_self' }}"
+                   title="{{ $social->label }}"
+                   class="text-muted text-decoration-none fs-18">
+                    @if($social->icon)
+                        <i class="{{ $social->icon }}"></i>
+                    @else
+                        <span class="fs-13">{{ $social->label }}</span>
+                    @endif
+                </a>
+            @endforeach
         </div>
     </div>
 </footer>
@@ -129,35 +117,26 @@
     function applyTheme(theme) {
         htmlEl.setAttribute('data-bs-theme', theme);
         localStorage.setItem('theme', theme);
-
-        // Update all toggle icons
-        document.querySelectorAll('[id^="theme-icon"]').forEach(icon => {
-            icon.className = theme === 'dark' ? 'ti ti-sun' : 'ti ti-moon';
-        });
+        document.getElementById('theme-icon').className =
+            theme === 'dark' ? 'ti ti-sun fs-18' : 'ti ti-moon fs-18';
     }
 
-    // Apply on load before render to avoid flash
     applyTheme(stored);
 
-    // Wire up both toggles (mobile + desktop)
-    document.querySelectorAll('[id^="theme-toggle"]').forEach(btn => {
-        btn.addEventListener('click', () => {
-            applyTheme(htmlEl.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark');
-        });
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+        applyTheme(htmlEl.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark');
     });
 
-    // ── Smooth scroll for anchor links ────────────────────────────
+    // ── Smooth scroll ─────────────────────────────────────────────
     document.querySelectorAll('a[href*="#"]').forEach(link => {
         link.addEventListener('click', function (e) {
             const url = new URL(this.href, window.location.href);
             const isSamePage = url.pathname === window.location.pathname;
             const hash = url.hash;
-
             if (isSamePage && hash) {
                 const target = document.querySelector(hash);
                 if (target) {
                     e.preventDefault();
-                    // Close mobile navbar if open
                     const navbar = document.getElementById('navbarNav');
                     if (navbar.classList.contains('show')) {
                         bootstrap.Collapse.getInstance(navbar)?.hide();
@@ -172,20 +151,22 @@
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
 
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                navLinks.forEach(link => {
-                    link.classList.remove('active', 'fw-semibold');
-                    if (link.getAttribute('href')?.includes('#' + entry.target.id)) {
-                        link.classList.add('active', 'fw-semibold');
-                    }
-                });
-            }
-        });
-    }, {threshold: 0.4});
-
-    sections.forEach(section => observer.observe(section));
+    sections.forEach(section => {
+        new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('fw-semibold');
+                        link.classList.add('text-muted');
+                        if (link.getAttribute('href')?.includes('#' + entry.target.id)) {
+                            link.classList.add('fw-semibold');
+                            link.classList.remove('text-muted');
+                        }
+                    });
+                }
+            });
+        }, {threshold: 0.4}).observe(section);
+    });
 </script>
 
 @stack('scripts')
