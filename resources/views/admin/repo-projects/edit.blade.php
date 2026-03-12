@@ -71,16 +71,42 @@
                             </div>
 
                             <div class="col-12">
-                                <label class="form-label">
-                                    Tech Stack
-                                    <span class="text-muted fs-12">(comma separated — e.g. PHP, Laravel, MySQL)</span>
-                                </label>
-                                <input type="text" name="tech"
-                                       class="form-control"
-                                       value="{{ old('tech', $project['tech']) }}"
-                                       placeholder="PHP, Laravel, MySQL, Bootstrap">
+                                <label class="form-label">Tech Stack</label>
+                                <div class="border rounded p-3">
+                                    @foreach($skillCategories as $category)
+                                        <div class="mb-3">
+                                            <p class="fs-12 fw-semibold text-uppercase text-muted mb-2">
+                                                @if($category->icon)
+                                                    <i class="{{ $category->icon }} me-1"></i>
+                                                @endif
+                                                {{ $category->name }}
+                                            </p>
+                                            <div class="d-flex flex-wrap gap-2">
+                                                @foreach($category->skills as $skill)
+                                                    <div class="form-check form-check-inline m-0">
+                                                        <input class="form-check-input" type="checkbox"
+                                                               name="tech[]"
+                                                               id="skill_{{ $skill->id }}"
+                                                               value="{{ $skill->name }}"
+                                                            {{ in_array($skill->name, old('tech', $project['tech_array'])) ? 'checked' : '' }}>
+                                                        <label class="form-check-label fs-13"
+                                                               for="skill_{{ $skill->id }}">
+                                                            @if($skill->icon)
+                                                                <i class="{{ $skill->icon }} me-1"></i>
+                                                            @endif
+                                                            {{ $skill->name }}
+                                                        </label>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        @if(!$loop->last)
+                                            <hr class="my-2">
+                                        @endif
+                                    @endforeach
+                                </div>
+                                <div class="form-text">Check all technologies used in this project.</div>
                             </div>
-
                             <div class="col-md-6">
                                 <label class="form-label">Live URL</label>
                                 <input type="url" name="live_url"

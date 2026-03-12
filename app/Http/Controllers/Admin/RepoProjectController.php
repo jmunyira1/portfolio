@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\SkillCategory;
 use App\Services\RepoProjectService;
 use Illuminate\Http\Request;
 use Symfony\Component\Yaml\Yaml;
@@ -13,16 +14,13 @@ class RepoProjectController extends Controller
     {
     }
 
-    /**
-     * List all repo folders (including ones without valid README).
-     */
     public function index()
     {
         $base = rtrim(config('repos.path', dirname(base_path())), '/');
         $folders = array_filter(glob($base . '/*'), 'is_dir');
 
         $projects = collect($folders)
-            ->map(function ($path) use ($base) {
+            ->map(function ($path) {
                 $folder = basename($path);
                 if ($folder === 'portfolio') return null;
 
@@ -46,9 +44,6 @@ class RepoProjectController extends Controller
         return view('admin.repo-projects.index', compact('projects'));
     }
 
-    /**
-     * Show edit form for a repo. Pre-fills from existing README or blank defaults.
-     */
     public function edit(string $slug)
     {
         $this->guardSlug($slug);
@@ -59,7 +54,6 @@ class RepoProjectController extends Controller
 
         abort_unless(is_dir($repoPath), 404);
 
-        // Parse existing or set blank defaults
         if (file_exists($readmePath)) {
             $content = file_get_contents($readmePath);
             preg_match('/^---\s*\n(.*?)\n---\s*\n/s', $content, $matches);
@@ -70,16 +64,20 @@ class RepoProjectController extends Controller
             $body = '';
         }
 
+        // Normalise tech to array
+        $techArray = [];
+        if (isset($meta['tech'])) {
+            $techArray = is_array($meta['tech'])
+                ? $meta['tech']
+                : collect(explode(',', $meta['tech']))->map(fn($t) => trim($t))->filter()->values()->toArray();
+        }
+
         $project = [
             'slug' => $slug,
             'title' => $meta['title'] ?? ucwords(str_replace(['-', '_'], ' ', $slug)),
             'summary' => $meta['summary'] ?? '',
             'description' => $meta['description'] ?? '',
-            'tech' => isset($meta['tech'])
-                ? (is_array($meta['tech'])
-                    ? implode(', ', $meta['tech'])
-                    : $meta['tech'])
-                : '',
+            'tech_array' => $techArray,
             'live_url' => $meta['live_url'] ?? '',
             'github_url' => $meta['github_url'] ?? '',
             'featured' => $meta['featured'] ?? false,
@@ -103,7 +101,13 @@ class RepoProjectController extends Controller
                 ->toArray();
         }
 
-        return view('admin.repo-projects.edit', compact('project', 'screenshots'));
+        $skillCategories = SkillCategory::with(['skills' => fn($q) => $q->orderBy('sort_order')])
+            ->orderBy('name')
+            ->get();
+
+        return view('admin.repo-projects.edit', compact(
+            'project', 'screenshots', 'skillCategories'
+        ));
     }
 
     protected function guardSlug(string $slug): void
@@ -114,9 +118,6 @@ class RepoProjectController extends Controller
         abort_if($slug === 'portfolio', 404);
     }
 
-    /**
-     * Write the form data back to README.md.
-     */
     public function update(Request $request, string $slug)
     {
         $this->guardSlug($slug);
@@ -125,7 +126,8 @@ class RepoProjectController extends Controller
             'title' => 'required|string|max:255',
             'summary' => 'required|string|max:500',
             'description' => 'nullable|string',
-            'tech' => 'nullable|string',
+            'tech' => 'nullable|array',
+            'tech.*' => 'string|max:100',
             'live_url' => 'nullable|url',
             'github_url' => 'nullable|url',
             'order' => 'nullable|integer|min:1',
@@ -138,14 +140,12 @@ class RepoProjectController extends Controller
 
         abort_unless(is_dir($repoPath), 404);
 
-        // Build tech array from comma-separated string
-        $tech = collect(explode(',', $request->input('tech', '')))
+        $tech = collect($request->input('tech', []))
             ->map(fn($t) => trim($t))
             ->filter()
             ->values()
             ->toArray();
 
-        // Build frontmatter array
         $meta = [
             'title' => $request->input('title'),
             'summary' => $request->input('summary'),
@@ -155,12 +155,10 @@ class RepoProjectController extends Controller
             'github_url' => $request->input('github_url') ?: null,
             'featured' => $request->boolean('featured'),
             'active' => $request->boolean('active'),
-            'order' => $request->input('order')
-                ? (int)$request->input('order')
-                : null,
+            'order' => $request->input('order') ? (int)$request->input('order') : null,
         ];
 
-        // Remove null values to keep README clean
+        // Remove nulls to keep README clean
         $meta = array_filter($meta, fn($v) => $v !== null);
 
         $yaml = Yaml::dump($meta, 2, 2);
@@ -168,7 +166,6 @@ class RepoProjectController extends Controller
 
         $readme = "---\n{$yaml}---\n\n{$body}";
 
-        // Create screenshots dir if missing
         if (!is_dir($repoPath . '/screenshots')) {
             mkdir($repoPath . '/screenshots', 0755, true);
         }
@@ -180,9 +177,6 @@ class RepoProjectController extends Controller
             ->with('success', "README for \"{$request->input('title')}\" saved successfully.");
     }
 
-    /**
-     * Delete a single screenshot file.
-     */
     public function destroyScreenshot(Request $request, string $slug)
     {
         $this->guardSlug($slug);
@@ -200,9 +194,6 @@ class RepoProjectController extends Controller
         return back()->with('success', 'Screenshot deleted.');
     }
 
-    /**
-     * Upload new screenshots to the repo's screenshots folder.
-     */
     public function uploadScreenshots(Request $request, string $slug)
     {
         $this->guardSlug($slug);
