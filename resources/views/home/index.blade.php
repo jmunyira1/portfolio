@@ -6,76 +6,133 @@
 @section('content')
 
     {{-- ── Hero ────────────────────────────────────────────────── --}}
-    <section id="hero" class="pb-5 mb-2">
+    <section id="hero" class="pb-5">
 
-        @if(!empty($settings['avatar']))
-            <img src="{{ asset('storage/' . $settings['avatar']) }}"
-                 alt="{{ $settings['name'] }}"
-                 width="72" height="72"
-                 class="rounded-circle object-fit-cover mb-4 d-block">
-        @endif
+        <div class="row align-items-center g-4">
 
-        <h1 class="fw-bold mb-3 fs-2">
-            {{ $settings['name'] ?? 'Munyira Joseph' }}
-        </h1>
+            {{-- Left — text --}}
+            <div class="col-lg-8">
 
-        @if(!empty($settings['bio']))
-            <p class="text-muted mb-3 fs-15" style="max-width:520px">
-                {{ $settings['bio'] }}
-            </p>
-        @endif
+                <h1 class="fw-bold mb-2 fs-2">
+                    {{ $settings['name'] ?? 'Munyira Joseph' }}
+                </h1>
 
-        @if(!empty($settings['location']))
-            <p class="text-muted fs-13 mb-3">
-                <i class="ti ti-map-pin me-1"></i>{{ $settings['location'] }}
-            </p>
-        @endif
+                @if(!empty($settings['tagline']))
+                    <p class="text-muted fs-15 mb-3">{{ $settings['tagline'] }}</p>
+                @endif
 
-        {{-- Primary contacts --}}
-        <div class="d-flex flex-wrap gap-3 align-items-center mb-3">
-            @foreach($socials->where('is_primary', true) as $social)
-                <a href="{{ $social->url }}"
-                   class="text-body text-decoration-none fs-14 d-flex align-items-center gap-1">
-                    @if($social->icon)
-                        <i class="{{ $social->icon }}"></i>
+                @if(!empty($settings['bio']))
+                    <p class="text-muted mb-3 fs-14">{{ $settings['bio'] }}</p>
+                @endif
+
+                @if(!empty($settings['location']))
+                    <p class="text-muted fs-13 mb-3">
+                        <i class="ti ti-map-pin me-1"></i>{{ $settings['location'] }}
+                    </p>
+                @endif
+
+                {{-- Primary contacts --}}
+                <div class="d-flex flex-wrap gap-3 align-items-center mb-3">
+                    @foreach($socials->where('is_primary', true) as $social)
+                        <a href="{{ $social->url }}"
+                           class="text-body text-decoration-none fs-13 d-flex align-items-center gap-1">
+                            @if($social->icon)
+                                <i class="{{ $social->icon }}"></i>
+                            @endif
+                            {{ $social->value }}
+                        </a>
+                    @endforeach
+
+                    @if(!empty($settings['resume_path']))
+                        <a href="{{ asset($settings['resume_path']) }}" target="_blank"
+                           class="text-body text-decoration-none fs-13">
+                            Resume <i class="ti ti-arrow-up-right fs-11"></i>
+                        </a>
                     @endif
-                    {{ $social->value }}
-                </a>
-            @endforeach
+                </div>
 
-            @if(!empty($settings['resume_path']))
-                <a href="{{ asset($settings['resume_path']) }}" target="_blank"
-                   class="text-body text-decoration-none fs-14">
-                    Resume <i class="ti ti-arrow-up-right fs-12"></i>
-                </a>
+                {{-- Social icons --}}
+                <div class="d-flex gap-3">
+                    @foreach($socials->where('is_primary', false) as $social)
+                        <a href="{{ $social->url }}" target="_blank"
+                           title="{{ $social->label }}"
+                           class="text-muted text-decoration-none fs-18 link-body-emphasis">
+                            @if($social->icon)
+                                <i class="{{ $social->icon }}"></i>
+                            @else
+                                <span class="fs-13">{{ $social->label }}</span>
+                            @endif
+                        </a>
+                    @endforeach
+                </div>
+
+            </div>
+
+            {{-- Right — avatar --}}
+            @if(!empty($settings['avatar']))
+                <div class="col-lg-4 text-lg-end text-center">
+                    <img src="{{ asset('storage/' . $settings['avatar']) }}"
+                         alt="{{ $settings['name'] }}"
+                         class="rounded object-fit-cover"
+                         style="width:180px;height:180px">
+                </div>
             @endif
+
         </div>
 
-        {{-- Social icons --}}
-        <div class="d-flex gap-3">
-            @foreach($socials->where('is_primary', false) as $social)
-                <a href="{{ $social->url }}" target="_blank"
-                   title="{{ $social->label }}"
-                   class="text-muted text-decoration-none fs-18 link-body-emphasis">
-                    @if($social->icon)
-                        <i class="{{ $social->icon }}"></i>
-                    @else
-                        <span class="fs-13">{{ $social->label }}</span>
-                    @endif
-                </a>
+    </section>
+
+
+    {{-- ── Skills ───────────────────────────────────────────────── --}}
+    <section id="skills" class="py-5 border-top">
+
+        <h2 class="fs-11 fw-semibold text-uppercase text-muted letter-spacing-1 mb-4">Skills</h2>
+
+        <div class="row g-3">
+            @foreach($categories as $category)
+                <div class="col-sm-6 col-xl-4">
+                    <div class="border rounded p-3 h-100">
+
+                        <p class="fw-semibold fs-13 mb-3">
+                            @if($category->icon)
+                                <i class="{{ $category->icon }} me-1 text-muted"></i>
+                            @endif
+                            {{ $category->name }}
+                        </p>
+
+                        @foreach($category->skills as $skill)
+                            <div class="mb-2">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="fs-12 d-flex align-items-center gap-1">
+                            @if($skill->icon)
+                                <i class="{{ $skill->icon }} text-muted"></i>
+                            @endif
+                            {{ $skill->name }}
+                        </span>
+                                    <span class="fs-11 text-muted">{{ $skill->proficiency }}%</span>
+                                </div>
+                                <div class="progress" style="height:2px">
+                                    <div class="progress-bar bg-dark"
+                                         role="progressbar"
+                                         style="width:{{ $skill->proficiency }}%">
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+
+                    </div>
+                </div>
             @endforeach
         </div>
 
     </section>
 
-    {{-- ── Projects ─────────────────────────────────────────────── --}}
-    {{-- ── Projects ─────────────────────────────────────────────── --}}
+
     {{-- ── Projects ─────────────────────────────────────────────── --}}
     <section id="projects" class="py-5 border-top">
 
         <h2 class="fs-11 fw-semibold text-uppercase text-muted letter-spacing-1 mb-4">Projects</h2>
 
-        {{-- Filter --}}
         <div class="d-flex gap-3 mb-4">
             <button class="proj-filter btn btn-link text-body fw-semibold p-0 text-decoration-underline shadow-none"
                     data-filter="all">All
@@ -95,10 +152,8 @@
                     $type       = $isSoftware ? 'software' : 'technical';
                 @endphp
                 <div class="col-12 col-lg-6 col-xl-4 proj-item" data-type="{{ $type }}">
-
                     <div class="border rounded p-3 h-100 d-flex flex-column">
 
-                        {{-- Cover image --}}
                         @if(!empty($project['cover']))
                             <a href="{{ route('projects.show', $project['slug']) }}"
                                class="d-block rounded overflow-hidden mb-3">
@@ -109,7 +164,6 @@
                             </a>
                         @endif
 
-                        {{-- Title + type badge --}}
                         <div class="d-flex align-items-start justify-content-between gap-2 mb-1">
                             <a href="{{ route('projects.show', $project['slug']) }}"
                                class="fw-semibold text-body text-decoration-none fs-15 lh-sm">
@@ -120,12 +174,10 @@
                     </span>
                         </div>
 
-                        {{-- Summary --}}
                         <p class="text-muted fs-13 mb-2 flex-grow-1">
                             {{ Str::limit($project['summary'], 100) }}
                         </p>
 
-                        {{-- Tech tags --}}
                         @if(!empty($project['tech']))
                             <div class="d-flex flex-wrap gap-1 mb-3">
                                 @foreach(array_slice($project['tech'], 0, 4) as $tech)
@@ -139,7 +191,6 @@
                             </div>
                         @endif
 
-                        {{-- Links --}}
                         <div class="d-flex gap-2 mt-auto">
                             <a href="{{ route('projects.show', $project['slug']) }}"
                                class="btn btn-dark btn-sm px-3 fs-12">
@@ -169,74 +220,7 @@
         </div>
 
     </section>
-    @push('scripts')
-        <script>
-            const filterBtns = document.querySelectorAll('.proj-filter');
 
-            filterBtns.forEach(btn => {
-                btn.addEventListener('click', function () {
-                    filterBtns.forEach(b => {
-                        b.classList.remove('text-body', 'fw-semibold', 'text-decoration-underline');
-                        b.classList.add('text-muted');
-                    });
-                    this.classList.add('text-body', 'fw-semibold', 'text-decoration-underline');
-                    this.classList.remove('text-muted');
-
-                    const filter = this.dataset.filter;
-                    document.querySelectorAll('.proj-item').forEach(item => {
-                        item.style.display =
-                            (filter === 'all' || item.dataset.type === filter) ? '' : 'none';
-                    });
-                });
-            });
-        </script>
-    @endpush
-    {{-- ── Skills ───────────────────────────────────────────────── --}}
-    {{-- ── Skills ───────────────────────────────────────────────── --}}
-    <section id="skills" class="py-5 border-top">
-
-        <h2 class="fs-11 fw-semibold text-uppercase text-muted letter-spacing-1 mb-4">Skills</h2>
-
-        <div class="row g-3">
-            @foreach($categories as $category)
-                <div class="col-sm-6 col-xl-4">
-                    <div class="border rounded p-3 h-100">
-
-                        {{-- Category header --}}
-                        <p class="fw-semibold fs-13 mb-3">
-                            @if($category->icon)
-                                <i class="{{ $category->icon }} me-1 text-muted"></i>
-                            @endif
-                            {{ $category->name }}
-                        </p>
-
-                        {{-- Skills list --}}
-                        @foreach($category->skills as $skill)
-                            <div class="mb-2">
-                                <div class="d-flex justify-content-between align-items-center mb-1">
-                        <span class="fs-12 d-flex align-items-center gap-1">
-                            @if($skill->icon)
-                                <i class="{{ $skill->icon }} text-muted"></i>
-                            @endif
-                            {{ $skill->name }}
-                        </span>
-                                    <span class="fs-11 text-muted">{{ $skill->proficiency }}%</span>
-                                </div>
-                                <div class="progress" style="height:2px">
-                                    <div class="progress-bar bg-dark"
-                                         role="progressbar"
-                                         style="width:{{ $skill->proficiency }}%">
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-
-                    </div>
-                </div>
-            @endforeach
-        </div>
-
-    </section>
 
     {{-- ── Education & Experience ───────────────────────────────── --}}
     <section id="experience" class="py-5 border-top">
@@ -245,53 +229,57 @@
             Education & Experience
         </h2>
 
-        {{-- Education --}}
-        <p class="fs-11 fw-semibold text-uppercase text-muted letter-spacing-1 mb-3">Education</p>
+        <div class="row g-4">
 
-        @foreach($education as $edu)
-            <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap mb-4">
-                <div>
-                    <p class="fw-semibold mb-1">{{ $edu->degree }}</p>
-                    <p class="text-muted fs-13 mb-1">
-                        {{ $edu->institution }}
-                        @if($edu->location)
-                            · {{ $edu->location }}
-                        @endif
-                    </p>
-                    @if($edu->grade)
-                        <span class="badge bg-light text-muted border fw-normal fs-11">{{ $edu->grade }}</span>
-                    @endif
-                </div>
-                <span class="text-muted fs-12 text-nowrap">
-            {{ $edu->start_year }} — {{ $edu->is_current ? 'Present' : $edu->end_year }}
-        </span>
-            </div>
-        @endforeach
+            <div class="col-lg-5">
+                <p class="fs-11 fw-semibold text-uppercase text-muted letter-spacing-1 mb-3">Education</p>
 
-        <hr class="my-4">
-
-        {{-- Experience --}}
-        <p class="fs-11 fw-semibold text-uppercase text-muted letter-spacing-1 mb-3">Experience</p>
-
-        @foreach($experiences as $exp)
-            <div class="mb-4">
-                <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap mb-2">
-                    <div>
-                        <p class="fw-semibold mb-0">{{ $exp->title }}</p>
-                        <p class="text-muted fs-13 mb-0">{{ $exp->client->name }}</p>
+                @foreach($education as $edu)
+                    <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap mb-4">
+                        <div>
+                            <p class="fw-semibold mb-1">{{ $edu->degree }}</p>
+                            <p class="text-muted fs-13 mb-1">
+                                {{ $edu->institution }}
+                                @if($edu->location)
+                                    · {{ $edu->location }}
+                                @endif
+                            </p>
+                            @if($edu->grade)
+                                <span class="badge bg-light text-muted border fw-normal fs-11">{{ $edu->grade }}</span>
+                            @endif
+                        </div>
+                        <span class="text-muted fs-12 text-nowrap">
+                    {{ $edu->start_year }} — {{ $edu->is_current ? 'Present' : $edu->end_year }}
+                </span>
                     </div>
-                    <span class="text-muted fs-12 text-nowrap">
-                {{ $exp->start_date->format('M Y') }} —
-                {{ $exp->is_current ? 'Present' : $exp->end_date?->format('M Y') }}
-            </span>
-                </div>
-                <ul class="mb-0 ps-3">
-                    @foreach($exp->responsibilities as $resp)
-                        <li class="text-muted fs-13 mb-1">{{ $resp }}</li>
-                    @endforeach
-                </ul>
+                @endforeach
             </div>
-        @endforeach
+
+            <div class="col-lg-7">
+                <p class="fs-11 fw-semibold text-uppercase text-muted letter-spacing-1 mb-3">Experience</p>
+
+                @foreach($experiences as $exp)
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap mb-2">
+                            <div>
+                                <p class="fw-semibold mb-0">{{ $exp->title }}</p>
+                                <p class="text-muted fs-13 mb-0">{{ $exp->client->name }}</p>
+                            </div>
+                            <span class="text-muted fs-12 text-nowrap">
+                        {{ $exp->start_date->format('M Y') }} —
+                        {{ $exp->is_current ? 'Present' : $exp->end_date?->format('M Y') }}
+                    </span>
+                        </div>
+                        <ul class="mb-0 ps-3">
+                            @foreach($exp->responsibilities as $resp)
+                                <li class="text-muted fs-13 mb-1">{{ $resp }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endforeach
+            </div>
+
+        </div>
 
     </section>
 
@@ -299,11 +287,9 @@
     {{-- ── Contact ───────────────────────────────────────────────── --}}
     <section id="contact" class="py-5 border-top">
 
-        <h2 class="fs-11 fw-semibold text-uppercase text-muted letter-spacing-1 mb-4">
-            Contact
-        </h2>
+        <h2 class="fs-11 fw-semibold text-uppercase text-muted letter-spacing-1 mb-4">Contact</h2>
 
-        <p class="text-muted fs-14 mb-4" style="max-width:480px">
+        <p class="text-muted fs-14 mb-4">
             Have a project in mind or just want to say hi? Fill in the form or reach me at
             <a href="mailto:{{ $settings['contact_email'] ?? '' }}"
                class="text-body text-decoration-none fw-medium">
@@ -312,7 +298,7 @@
         </p>
 
         @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show fs-13" role="alert">
+            <div class="alert alert-success alert-dismissible fade show fs-13">
                 {{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
@@ -369,7 +355,6 @@
 
 @push('scripts')
     <script>
-        // Project filter
         const filterBtns = document.querySelectorAll('.proj-filter');
 
         filterBtns.forEach(btn => {
@@ -382,22 +367,9 @@
                 this.classList.remove('text-muted');
 
                 const filter = this.dataset.filter;
-                const items = document.querySelectorAll('.proj-item');
-
-                items.forEach(item => {
+                document.querySelectorAll('.proj-item').forEach(item => {
                     item.style.display =
                         (filter === 'all' || item.dataset.type === filter) ? '' : 'none';
-                });
-
-                // Show divider only before last visible item
-                const visible = [...items].filter(i => i.style.display !== 'none');
-                items.forEach(item => {
-                    const hr = item.querySelector('hr');
-                    if (hr) hr.style.display = 'none';
-                });
-                visible.slice(0, -1).forEach(item => {
-                    const hr = item.querySelector('hr');
-                    if (hr) hr.style.display = '';
                 });
             });
         });

@@ -40,11 +40,12 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-md-center gap-md-1">
-                <li class="nav-item">
-                    <a class="nav-link text-muted py-1" href="{{ route('home') }}#projects">Projects</a>
-                </li>
+
                 <li class="nav-item">
                     <a class="nav-link text-muted py-1" href="{{ route('home') }}#skills">Skills</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted py-1" href="{{ route('home') }}#projects">Projects</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-muted py-1" href="{{ route('home') }}#experience">Experience</a>
