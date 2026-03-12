@@ -1,63 +1,65 @@
 @extends('layouts.app')
 
-@section('title', $project->title)
-@section('meta_description', $project->summary)
+@section('title', $project['title'])
+@section('meta_description', $project['summary'])
 
 @section('content')
-    <div class="container py-5">
+    <div class="py-4">
 
-        {{-- Back --}}
         <a href="{{ route('home') }}#projects" class="btn btn-outline-secondary btn-sm mb-4">
             <i class="ti ti-arrow-left me-1"></i> Back to Projects
         </a>
 
         <div class="row g-5">
 
-            {{-- Left — images carousel --}}
+            {{-- Left — carousel --}}
             <div class="col-lg-7">
-                @if($project->images->count())
-                    <div id="projectCarousel" class="carousel slide rounded overflow-hidden shadow-sm"
+                @if(!empty($project['screenshots']))
+                    <div id="projectCarousel" class="carousel slide rounded overflow-hidden border"
                          data-bs-ride="carousel">
                         <div class="carousel-inner">
-                            @foreach($project->images as $image)
-                                <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-                                    <img src="{{ asset('storage/' . $image->path) }}"
-                                         class="d-block w-100"
-                                         alt="{{ $image->caption ?? $project->title }}"
-                                         style="height:400px;object-fit:cover">
-                                    @if($image->caption)
-                                        <div class="carousel-caption d-none d-md-block">
-                                            <p class="mb-0 fs-13">{{ $image->caption }}</p>
-                                        </div>
-                                    @endif
+                            @foreach($project['screenshots'] as $i => $url)
+                                <div class="carousel-item {{ $i === 0 ? 'active' : '' }}">
+                                    <img src="{{ $url }}"
+                                         class="d-block w-100 object-fit-cover"
+                                         alt="{{ $project['title'] }}"
+                                         style="height:380px">
                                 </div>
                             @endforeach
                         </div>
-                        @if($project->images->count() > 1)
-                            <button class="carousel-control-prev" type="button" data-bs-target="#projectCarousel"
-                                    data-bs-slide="prev">
+                        @if(count($project['screenshots']) > 1)
+                            <button class="carousel-control-prev" type="button"
+                                    data-bs-target="#projectCarousel" data-bs-slide="prev">
                                 <span class="carousel-control-prev-icon"></span>
                             </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#projectCarousel"
-                                    data-bs-slide="next">
+                            <button class="carousel-control-next" type="button"
+                                    data-bs-target="#projectCarousel" data-bs-slide="next">
                                 <span class="carousel-control-next-icon"></span>
                             </button>
-                            <div class="carousel-indicators position-relative mt-2">
-                                @foreach($project->images as $image)
-                                    <button type="button" data-bs-target="#projectCarousel"
-                                            data-bs-slide-to="{{ $loop->index }}"
-                                            class="{{ $loop->first ? 'active' : '' }}"
-                                            style="width:60px;height:40px;opacity:0.6">
-                                        <img src="{{ asset('storage/' . $image->path) }}"
-                                             class="w-100 h-100 rounded" style="object-fit:cover">
-                                    </button>
-                                @endforeach
-                            </div>
+                            {{-- Thumbnail strip --}}
+                            @if(count($project['screenshots']) > 1)
+                                <div class="d-flex gap-1 p-2 overflow-auto">
+                                    @foreach($project['screenshots'] as $i => $url)
+                                        <img src="{{ $url }}"
+                                             class="rounded border object-fit-cover flex-shrink-0"
+                                             style="width:64px;height:44px;cursor:pointer;
+                                opacity:{{ $i === 0 ? '1' : '0.55' }}"
+                                             onclick="
+                            bootstrap.Carousel.getInstance(
+                                document.getElementById('projectCarousel')
+                            ).to({{ $i }});
+                            document.querySelectorAll('#thumb-strip img')
+                                .forEach((t,j) => t.style.opacity = j==={{ $i }} ? '1':'0.55');
+                         "
+                                             id="thumb-strip">
+                                    @endforeach
+                                </div>
+                            @endif
                         @endif
                     </div>
                 @else
-                    <div class="bg-light rounded d-flex align-items-center justify-content-center shadow-sm"
-                         style="height:400px">
+                    <div class="bg-light rounded border d-flex align-items-center
+                        justify-content-center" style="height:380px">
                         <i class="ti ti-photo text-muted fs-48"></i>
                     </div>
                 @endif
@@ -66,66 +68,49 @@
             {{-- Right — details --}}
             <div class="col-lg-5">
 
-                <div class="d-flex gap-2 mb-3">
-                    @if($project->is_software)
-                        <span class="badge bg-primary-subtle text-primary">Software</span>
-                    @else
-                        <span class="badge bg-warning-subtle text-warning">Technical</span>
-                    @endif
-                    @if($project->category)
-                        <span class="badge bg-light text-dark border">{{ $project->category->name }}</span>
-                    @endif
-                    @if($project->client)
-                        <span class="badge bg-light text-dark border">{{ $project->client->name }}</span>
-                    @endif
-                </div>
+                <h1 class="fw-bold mb-2 fs-3">{{ $project['title'] }}</h1>
 
-                <h1 class="fw-bold mb-3">{{ $project->title }}</h1>
-
-                <p class="text-muted">{{ $project->description ?? $project->summary }}</p>
+                <p class="text-muted mb-4">{{ $project['description'] ?: $project['summary'] }}</p>
 
                 {{-- Links --}}
-                <div class="d-flex gap-2 my-4">
-                    @if($project->url)
-                        <a href="{{ $project->url }}" target="_blank" class="btn btn-dark btn-sm">
+                <div class="d-flex gap-2 mb-4">
+                    @if(!empty($project['live_url']))
+                        <a href="{{ $project['live_url'] }}" target="_blank" class="btn btn-dark btn-sm px-3">
                             <i class="ti ti-external-link me-1"></i> Live Site
                         </a>
                     @endif
-                    @if($project->github_url)
-                        <a href="{{ $project->github_url }}" target="_blank" class="btn btn-outline-dark btn-sm">
+                    @if(!empty($project['github_url']))
+                        <a href="{{ $project['github_url'] }}" target="_blank"
+                           class="btn btn-outline-secondary btn-sm px-3">
                             <i class="ti ti-brand-github me-1"></i> GitHub
                         </a>
                     @endif
                 </div>
 
-                {{-- Key features --}}
-                @if(!empty($project->key_features))
+                {{-- Tech stack --}}
+                @if(!empty($project['tech']))
                     <div class="mb-4">
-                        <h6 class="fw-semibold mb-3">Key Features</h6>
-                        <ul class="list-unstyled">
-                            @foreach($project->key_features as $feature)
-                                <li class="d-flex gap-2 mb-2">
-                                    <i class="ti ti-check text-primary flex-shrink-0 mt-1"></i>
-                                    <span class="text-muted fs-13">{{ $feature }}</span>
-                                </li>
+                        <p class="fs-12 fw-semibold text-uppercase text-muted letter-spacing-1 mb-2">
+                            Tech Stack
+                        </p>
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach($project['tech'] as $tech)
+                                <span class="badge bg-light text-muted border fw-normal fs-12">
+                        {{ $tech }}
+                    </span>
                             @endforeach
-                        </ul>
+                        </div>
                     </div>
                 @endif
 
-                {{-- Skills --}}
-                @if($project->skills->count())
-                    <div>
-                        <h6 class="fw-semibold mb-2">Technologies Used</h6>
-                        <div class="d-flex flex-wrap gap-2">
-                            @foreach($project->skills as $skill)
-                                <span class="badge bg-light text-dark border">
-                        @if($skill->icon)
-                                        <i class="{{ $skill->icon }} me-1"></i>
-                                    @endif
-                                    {{ $skill->name }}
-                    </span>
-                            @endforeach
+                {{-- README body (repo projects only) --}}
+                @if(!empty($project['readme_body']))
+                    <div class="mb-2">
+                        <p class="fs-12 fw-semibold text-uppercase text-muted letter-spacing-1 mb-2">
+                            About this project
+                        </p>
+                        <div class="text-muted fs-13">
+                            {!! \Illuminate\Support\Str::markdown($project['readme_body']) !!}
                         </div>
                     </div>
                 @endif
@@ -133,28 +118,36 @@
             </div>
         </div>
 
-        {{-- Related projects --}}
+        {{-- Related --}}
         @if($related->count())
             <div class="mt-5 pt-4 border-top">
-                <h5 class="fw-semibold mb-4">Related Projects</h5>
-                <div class="row g-4">
+                <h5 class="fw-semibold mb-4 fs-14 text-uppercase text-muted letter-spacing-1">
+                    More Projects
+                </h5>
+                <div class="row g-3">
                     @foreach($related as $rel)
                         <div class="col-md-4">
-                            <div class="card border-0 shadow-sm h-100">
-                                @if($rel->coverImage)
-                                    <div style="height:150px;overflow:hidden">
-                                        <img src="{{ asset('storage/' . $rel->coverImage->path) }}"
-                                             class="w-100 h-100" style="object-fit:cover" alt="{{ $rel->title }}">
-                                    </div>
-                                @endif
-                                <div class="card-body">
-                                    <h6 class="fw-semibold mb-1">{{ $rel->title }}</h6>
-                                    <p class="text-muted fs-13 mb-3">{{ Str::limit($rel->summary, 80) }}</p>
-                                    <a href="{{ route('projects.show', $rel->slug) }}"
-                                       class="btn btn-sm btn-outline-dark">
-                                        View Project
+                            <div class="border rounded p-3 h-100 d-flex flex-column">
+                                @if(!empty($rel['cover']))
+                                    <a href="{{ route('projects.show', $rel['slug']) }}"
+                                       class="d-block rounded overflow-hidden mb-3">
+                                        <img src="{{ $rel['cover'] }}"
+                                             class="w-100 object-fit-cover rounded"
+                                             alt="{{ $rel['title'] }}"
+                                             style="height:120px">
                                     </a>
-                                </div>
+                                @endif
+                                <a href="{{ route('projects.show', $rel['slug']) }}"
+                                   class="fw-semibold text-body text-decoration-none fs-14 mb-1">
+                                    {{ $rel['title'] }}
+                                </a>
+                                <p class="text-muted fs-13 mb-3 flex-grow-1">
+                                    {{ Str::limit($rel['summary'], 80) }}
+                                </p>
+                                <a href="{{ route('projects.show', $rel['slug']) }}"
+                                   class="btn btn-outline-secondary btn-sm fs-12 mt-auto">
+                                    View project
+                                </a>
                             </div>
                         </div>
                     @endforeach

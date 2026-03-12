@@ -68,13 +68,11 @@
 
     </section>
 
-
+    {{-- ── Projects ─────────────────────────────────────────────── --}}
     {{-- ── Projects ─────────────────────────────────────────────── --}}
     <section id="projects" class="py-5 border-top">
 
-        <h2 class="fs-11 fw-semibold text-uppercase text-muted letter-spacing-1 mb-4">
-            Projects
-        </h2>
+        <h2 class="fs-11 fw-semibold text-uppercase text-muted letter-spacing-1 mb-4">Projects</h2>
 
         {{-- Filter --}}
         <div class="d-flex gap-3 mb-4">
@@ -89,79 +87,107 @@
             </button>
         </div>
 
-        @forelse($projects as $project)
-            <div class="proj-item mb-5" data-type="{{ $project->is_software ? 'software' : 'technical' }}">
+        <div class="row g-3" id="projects-grid">
+            @forelse($projects as $project)
+                <div class="col-12 col-lg-6 col-xl-4 proj-item"
+                     data-type="{{ $project->is_software ? 'software' : 'technical' }}">
 
-                {{-- Cover image --}}
-                @if($project->coverImage)
-                    <a href="{{ route('projects.show', $project->slug) }}" class="d-block mb-3 rounded overflow-hidden">
-                        <img src="{{ asset('storage/' . $project->coverImage->path) }}"
-                             alt="{{ $project->title }}"
-                             class="w-100 object-fit-cover rounded"
-                             style="height:220px">
-                    </a>
-                @endif
+                    <div class="border rounded p-3 h-100 d-flex flex-column">
 
-                <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
-                    <div class="flex-grow-1">
+                        {{-- Cover image --}}
+                        @if($project->coverImage)
+                            <a href="{{ route('projects.show', $project->slug) }}"
+                               class="d-block rounded overflow-hidden mb-3">
+                                <img src="{{ asset('storage/' . $project->coverImage->path) }}"
+                                     alt="{{ $project->title }}"
+                                     class="w-100 object-fit-cover rounded"
+                                     style="height:160px">
+                            </a>
+                        @endif
 
-                        <a href="{{ route('projects.show', $project->slug) }}"
-                           class="fw-semibold text-body text-decoration-none fs-16">
-                            {{ $project->title }}
-                        </a>
+                        {{-- Title row --}}
+                        <div class="d-flex align-items-start justify-content-between gap-2 mb-1">
+                            <a href="{{ route('projects.show', $project->slug) }}"
+                               class="fw-semibold text-body text-decoration-none fs-15 lh-sm">
+                                {{ $project->title }}
+                            </a>
+                            <span class="badge bg-light text-muted border fw-normal fs-11 flex-shrink-0">
+                        {{ $project->is_software ? 'Software' : 'Technical' }}
+                    </span>
+                        </div>
 
-                        <p class="text-muted fs-14 mt-1 mb-2">
-                            {{ Str::limit($project->summary, 120) }}
+                        {{-- Summary --}}
+                        <p class="text-muted fs-13 mb-2 flex-grow-1">
+                            {{ Str::limit($project->summary, 100) }}
                         </p>
 
+                        {{-- Skills --}}
                         @if($project->skills->count())
-                            <div class="d-flex flex-wrap gap-1 mb-2">
-                                @foreach($project->skills->take(5) as $skill)
-                                    <span class="badge bg-light text-muted border fw-normal fs-11">
-                        {{ $skill->name }}
-                    </span>
+                            <div class="d-flex flex-wrap gap-1 mb-3">
+                                @foreach($project->skills->take(4) as $skill)
+                                    <span
+                                        class="badge bg-light text-muted border fw-normal fs-11">{{ $skill->name }}</span>
                                 @endforeach
+                                @if($project->skills->count() > 4)
+                                    <span
+                                        class="badge bg-light text-muted border fw-normal fs-11">+{{ $project->skills->count() - 4 }}</span>
+                                @endif
                             </div>
                         @endif
 
-                        <div class="d-flex gap-3 mt-2">
+                        {{-- Links --}}
+                        <div class="d-flex gap-2 mt-auto">
                             <a href="{{ route('projects.show', $project->slug) }}"
-                               class="text-body text-decoration-none fs-13 fw-medium">
-                                View project <i class="ti ti-arrow-right fs-12"></i>
+                               class="btn btn-dark btn-sm px-3 fs-12">
+                                View project
                             </a>
                             @if($project->url)
                                 <a href="{{ $project->url }}" target="_blank"
-                                   class="text-muted text-decoration-none fs-13">
+                                   class="btn btn-outline-secondary btn-sm px-3 fs-12">
                                     Live <i class="ti ti-arrow-up-right fs-11"></i>
                                 </a>
                             @endif
                             @if($project->github_url)
                                 <a href="{{ $project->github_url }}" target="_blank"
-                                   class="text-muted text-decoration-none fs-13">
+                                   class="btn btn-outline-secondary btn-sm px-3 fs-12">
                                     GitHub <i class="ti ti-arrow-up-right fs-11"></i>
                                 </a>
                             @endif
                         </div>
 
                     </div>
-
-                    <span class="badge bg-light text-muted border fw-normal fs-11 flex-shrink-0">
-                {{ $project->is_software ? 'Software' : 'Technical' }}
-            </span>
                 </div>
-
-                @unless($loop->last)
-                    <hr class="mt-4 mb-0">
-                @endunless
-
-            </div>
-        @empty
-            <p class="text-muted">No projects yet.</p>
-        @endforelse
+            @empty
+                <div class="col-12">
+                    <p class="text-muted">No projects yet.</p>
+                </div>
+            @endforelse
+        </div>
 
     </section>
 
+    @push('scripts')
+        <script>
+            const filterBtns = document.querySelectorAll('.proj-filter');
 
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    filterBtns.forEach(b => {
+                        b.classList.remove('text-body', 'fw-semibold', 'text-decoration-underline');
+                        b.classList.add('text-muted');
+                    });
+                    this.classList.add('text-body', 'fw-semibold', 'text-decoration-underline');
+                    this.classList.remove('text-muted');
+
+                    const filter = this.dataset.filter;
+                    document.querySelectorAll('.proj-item').forEach(item => {
+                        item.style.display =
+                            (filter === 'all' || item.dataset.type === filter) ? '' : 'none';
+                    });
+                });
+            });
+        </script>
+    @endpush
     {{-- ── Skills ───────────────────────────────────────────────── --}}
     <section id="skills" class="py-5 border-top">
 

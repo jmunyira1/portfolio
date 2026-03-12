@@ -9,14 +9,21 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SkillCategoryController;
 use App\Http\Controllers\Admin\SkillController;
 use App\Http\Controllers\Admin\SocialController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HomeProjectController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RepoScreenshotController;
 use Illuminate\Support\Facades\Route;
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/projects/{project:slug}', [HomeProjectController::class, 'show'])->name('projects.show');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+
+Route::get('/repo-screenshot/{repo}/{file}', RepoScreenshotController::class)
+    ->name('repo.screenshot')
+    ->where('file', '[^/]+');
 
 Route::prefix('admin')
     ->name('admin.')

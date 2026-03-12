@@ -11,20 +11,59 @@ use App\Models\Social;
 
 class HomeProjectController extends Controller
 {
-    public function show(Project $project)
+    public function show(string $slug, RepoProjectService $repos)
     {
-        abort_unless($project->published, 404);
-
-        $project->load(['images', 'skills', 'category', 'client']);
         $settings = Setting::allKeyed();
         $socials = Social::orderByDesc('is_primary')->get();
 
+        // Try repo first
+        $project = $repos->find($slug);
+
+        if ($project) {
+            $related = $repos->all()
+                ->where('slug', '!=', $slug)
+                ->take(3)
+                ->values();
+
+            return view('home.project', compact('project', 'settings', 'socials', 'related'));
+        }
+
+        // Fall back to DB (technical projects)
+        $dbProject = Project::where('slug', $slug)->where('published', true)->firstOrFail();
+        $dbProject->load(['images', 'skills', 'category', 'client']);
+
+        $project = [
+            'slug' => $dbProject->slug,
+            'title' => $dbProject->title,
+            'summary' => $dbProject->summary,
+            'description' => $dbProject->description,
+            'tech' => $dbProject->skills->pluck('name')->toArray(),
+            'live_url' => $dbProject->url,
+            'github_url' => $dbProject->github_url,
+            'featured' => $dbProject->featured,
+            'order' => $dbProject->sort_order ?? 999,
+            'cover' => $dbProject->coverImage
+                ? asset('storage/' . $dbProject->coverImage->path)
+                : null,
+            'screenshots' => $dbProject->images
+                ->map(fn($i) => asset('storage/' . $i->path))
+                ->toArray(),
+            'readme_body' => null,
+            'source' => 'db',
+        ];
+
         $related = Project::with('coverImage')
             ->where('published', true)
-            ->where('id', '!=', $project->id)
-            ->where('skill_category_id', $project->skill_category_id)
-            ->limit(3)
-            ->get();
+            ->where('id', '!=', $dbProject->id)
+            ->where('is_software', false)
+            ->limit(3)->get()
+            ->map(fn($p) => [
+                'slug' => $p->slug,
+                'title' => $p->title,
+                'summary' => $p->summary,
+                'cover' => $p->coverImage ? asset('storage/' . $p->coverImage->path) : null,
+                'source' => 'db',
+            ]);
 
         return view('home.project', compact('project', 'settings', 'socials', 'related'));
     }
