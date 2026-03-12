@@ -221,68 +221,60 @@
         </div>
 
     </section>
-
-
-    {{-- ── Education & Experience ───────────────────────────────── --}}
+    {{-- ── Experience ───────────────────────────────────────────── --}}
     <section id="experience" class="py-5 border-top">
 
-        <h2 class="fs-11 fw-semibold text-uppercase text-muted letter-spacing-1 mb-4">
-            Education & Experience
-        </h2>
+        <h2 class="fs-11 fw-semibold text-uppercase text-muted letter-spacing-1 mb-4">Experience</h2>
 
-        <div class="row g-4">
-
-            <div class="col-lg-5">
-                <p class="fs-11 fw-semibold text-uppercase text-muted letter-spacing-1 mb-3">Education</p>
-
-                @foreach($education as $edu)
-                    <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap mb-4">
-                        <div>
-                            <p class="fw-semibold mb-1">{{ $edu->degree }}</p>
-                            <p class="text-muted fs-13 mb-1">
-                                {{ $edu->institution }}
-                                @if($edu->location)
-                                    · {{ $edu->location }}
-                                @endif
-                            </p>
-                            @if($edu->grade)
-                                <span class="badge bg-light text-muted border fw-normal fs-11">{{ $edu->grade }}</span>
-                            @endif
-                        </div>
-                        <span class="text-muted fs-12 text-nowrap">
-                    {{ $edu->start_year }} — {{ $edu->is_current ? 'Present' : $edu->end_year }}
-                </span>
+        @foreach($experiences as $exp)
+            <div class="mb-4">
+                <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap mb-2">
+                    <div>
+                        <p class="fw-semibold mb-0">{{ $exp->title }}</p>
+                        <p class="text-muted fs-13 mb-0">{{ $exp->client->name }}</p>
                     </div>
-                @endforeach
+                    <span class="text-muted fs-12 text-nowrap">
+                {{ $exp->start_date->format('M Y') }} —
+                {{ $exp->is_current ? 'Present' : $exp->end_date?->format('M Y') }}
+            </span>
+                </div>
+                <ul class="mb-0 ps-3">
+                    @foreach($exp->responsibilities as $resp)
+                        <li class="text-muted fs-13 mb-1">{{ $resp }}</li>
+                    @endforeach
+                </ul>
             </div>
-
-            <div class="col-lg-7">
-                <p class="fs-11 fw-semibold text-uppercase text-muted letter-spacing-1 mb-3">Experience</p>
-
-                @foreach($experiences as $exp)
-                    <div class="mb-4">
-                        <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap mb-2">
-                            <div>
-                                <p class="fw-semibold mb-0">{{ $exp->title }}</p>
-                                <p class="text-muted fs-13 mb-0">{{ $exp->client->name }}</p>
-                            </div>
-                            <span class="text-muted fs-12 text-nowrap">
-                        {{ $exp->start_date->format('M Y') }} —
-                        {{ $exp->is_current ? 'Present' : $exp->end_date?->format('M Y') }}
-                    </span>
-                        </div>
-                        <ul class="mb-0 ps-3">
-                            @foreach($exp->responsibilities as $resp)
-                                <li class="text-muted fs-13 mb-1">{{ $resp }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endforeach
-            </div>
-
-        </div>
+        @endforeach
 
     </section>
+
+    {{-- ── Education ────────────────────────────────────────────── --}}
+    <section id="education" class="py-5 border-top">
+
+        <h2 class="fs-11 fw-semibold text-uppercase text-muted letter-spacing-1 mb-4">Education</h2>
+
+        @foreach($education as $edu)
+            <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap mb-4">
+                <div>
+                    <p class="fw-semibold mb-1">{{ $edu->degree }}</p>
+                    <p class="text-muted fs-13 mb-1">
+                        {{ $edu->institution }}
+                        @if($edu->location)
+                            · {{ $edu->location }}
+                        @endif
+                    </p>
+                    @if($edu->grade)
+                        <span class="badge bg-light text-muted border fw-normal fs-11">{{ $edu->grade }}</span>
+                    @endif
+                </div>
+                <span class="text-muted fs-12 text-nowrap">
+            {{ $edu->start_year }} — {{ $edu->is_current ? 'Present' : $edu->end_year }}
+        </span>
+            </div>
+        @endforeach
+
+    </section>
+
 
 
     {{-- ── Contact ───────────────────────────────────────────────── --}}

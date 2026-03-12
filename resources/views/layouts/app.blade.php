@@ -51,6 +51,10 @@
                     <a class="nav-link text-muted py-1" href="{{ route('home') }}#experience">Experience</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link text-muted py-1" href="{{ route('home') }}#education">Education</a>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link text-muted py-1" href="{{ route('home') }}#contact">Contact</a>
                 </li>
                 @if(\App\Models\Setting::get('resume_path'))
