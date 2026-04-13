@@ -1,179 +1,136 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
+<html lang="en">
+
 <head>
-    <meta charset="utf-8"/>
-    <title>@yield('title', 'Munyira Joseph')</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="@yield('meta_description', 'Full-stack developer portfolio')">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Index - SnapFolio Bootstrap Template</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
 
-    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
-    <script src="{{ asset('assets/js/config.js') }}"></script>
-    <link href="{{ asset('assets/css/vendor.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" id="app-style">
-    <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet">
+    <!-- Favicons -->
+    <link href="{{ asset('assets/img/favicon.png')}}" rel="icon">
+    <link href="{{ asset('assets/img/apple-touch-icon.png')}}" rel="apple-touch-icon">
 
-    @stack('styles')
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css')}}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/aos/aos.css')}}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/glightbox/css/glightbox.min.css')}}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/swiper/swiper-bundle.min.css')}}" rel="stylesheet">
+
+    <!-- Main CSS File -->
+    <link href="{{ asset('assets/css/main.css')}}" rel="stylesheet">
+
 </head>
 
-<body>
+<body class="index-page">
 
-{{-- ── Navbar ── --}}
-<nav class="navbar navbar-expand-md py-3 border-bottom mb-5">
-    <div class="container-lg">
+<header id="header" class="header dark-background d-flex flex-column justify-content-center">
+    <i class="header-toggle d-xl-none bi bi-list"></i>
 
-        <a class="navbar-brand d-flex align-items-center gap-2 fw-semibold p-0" href="{{ route('home') }}">
-            @php $avatar = \App\Models\Setting::get('avatar'); @endphp
-            @if($avatar)
-                <img src="{{ asset('storage/' . $avatar) }}"
-                     alt="{{ \App\Models\Setting::get('name') }}"
-                     width="32" height="32"
-                     class="rounded-circle object-fit-cover">
-            @endif
-            {{ \App\Models\Setting::get('name', 'Portfolio') }}
-        </a>
-
-        <button class="navbar-toggler border-0 shadow-none" type="button"
-                data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <i class="ti ti-menu-2 fs-20"></i>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto align-items-md-center gap-md-1">
-
-                <li class="nav-item">
-                    <a class="nav-link text-muted py-1" href="{{ route('home') }}#skills">Skills</a>
+    <div class="header-container d-flex flex-column align-items-start">
+        <nav id="navmenu" class="navmenu">
+            <ul>
+                <li><a href="#hero" class="active"><i class="bi bi-house navicon"></i>Home</a></li>
+                <li><a href="#about"><i class="bi bi-person navicon"></i> About</a></li>
+                <li><a href="#resume"><i class="bi bi-file-earmark-text navicon"></i> Resume</a></li>
+                <li><a href="#portfolio"><i class="bi bi-images navicon"></i> Portfolio</a></li>
+                <li><a href="#services"><i class="bi bi-hdd-stack navicon"></i> Services</a></li>
+                <li class="dropdown"><a href="#"><i class="bi bi-menu-button navicon"></i> <span>Dropdown</span> <i
+                            class="bi bi-chevron-down toggle-dropdown"></i></a>
+                    <ul>
+                        <li><a href="#">Dropdown 1</a></li>
+                        <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i
+                                    class="bi bi-chevron-down toggle-dropdown"></i></a>
+                            <ul>
+                                <li><a href="#">Deep Dropdown 1</a></li>
+                                <li><a href="#">Deep Dropdown 2</a></li>
+                                <li><a href="#">Deep Dropdown 3</a></li>
+                                <li><a href="#">Deep Dropdown 4</a></li>
+                                <li><a href="#">Deep Dropdown 5</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Dropdown 2</a></li>
+                        <li><a href="#">Dropdown 3</a></li>
+                        <li><a href="#">Dropdown 4</a></li>
+                    </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link text-muted py-1" href="{{ route('home') }}#projects">Projects</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-muted py-1" href="{{ route('home') }}#experience">Experience</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-muted py-1" href="{{ route('home') }}#education">Education</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link text-muted py-1" href="{{ route('home') }}#contact">Contact</a>
-                </li>
-                @if(\App\Models\Setting::get('resume_path'))
-                    <li class="nav-item">
-                        <a class="nav-link text-muted py-1"
-                           href="{{ asset(\App\Models\Setting::get('resume_path')) }}"
-                           target="_blank">
-                            Resume <i class="ti ti-arrow-up-right fs-12"></i>
-                        </a>
-                    </li>
-                @endif
-                <li class="nav-item ms-md-2">
-                    <button class="btn btn-link text-muted p-0 shadow-none" id="theme-toggle">
-                        <i class="ti ti-moon fs-18" id="theme-icon"></i>
-                    </button>
-                </li>
+                <li><a href="#contact"><i class="bi bi-envelope navicon"></i> Contact</a></li>
             </ul>
-        </div>
+        </nav>
 
-    </div>
-</nav>
-{{-- ── End Navbar ── --}}
+        <div class="social-links text-center">
+            @foreach($socials->where('is_primary', false) as $social)
+                <a href="{{ $social->url }}" target="_blank"
+                   title="{{ $social->label }}">
 
-
-{{-- ── Page Content ── --}}
-<div class="container-lg pb-5">
-    @yield('content')
-</div>
-{{-- ── End Page Content ── --}}
-
-
-<footer class="border-top py-4 mt-4">
-    <div class="container-lg d-flex align-items-center justify-content-between flex-wrap gap-3">
-        <span class="text-muted fs-13">
-            &copy; {{ date('Y') }} {{ \App\Models\Setting::get('name', 'Portfolio') }}
-        </span>
-        <div class="d-flex gap-2">
-            @foreach(\App\Models\Social::orderByDesc('is_primary')->get() as $social)
-                <a href="{{ $social->url }}"
-                   target="{{ str_starts_with($social->url, 'http') ? '_blank' : '_self' }}"
-                   title="{{ $social->label }}"
-                   class="text-body text-decoration-none border rounded-circle d-flex align-items-center justify-content-center"
-                   style="width:34px;height:34px">
                     @if($social->icon)
-                        <i class="{{ $social->icon }} fs-16"></i>
-                    @else
-                        <span class="fs-11">{{ $social->label }}</span>
+                        <i class="{{ $social->icon }}"></i>
                     @endif
                 </a>
             @endforeach
         </div>
+
     </div>
+
+</header>
+
+<main class="main">
+
+    @yield('content')
+
+</main>
+
+<footer id="footer" class="footer position-relative">
+
+    <div class="container">
+        <div class="copyright text-center ">
+            <p>© <span>Copyright</span> <strong class="px-1 sitename">iPortfolio</strong>
+                <span>All Rights Reserved</span></p>
+        </div>
+        <div class="credits">
+            <!-- All the links in the footer should remain intact. -->
+            <!-- You can delete the links only if you've purchased the pro version. -->
+            <!-- Licensing information: https://bootstrapmade.com/license/ -->
+            <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> | <a
+                href="https://bootstrapmade.com/tools/">DevTools</a>
+        </div>
+    </div>
+
 </footer>
 
+<!-- Scroll Top -->
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
 
-<script src="{{ asset('assets/js/vendor.min.js') }}"></script>
-<script src="{{ asset('assets/js/app.js') }}"></script>
+<!-- Preloader -->
+<div id="preloader"></div>
 
-<script>
-    // ── Dark mode ─────────────────────────────────────────────────
-    const htmlEl = document.documentElement;
-    const stored = localStorage.getItem('theme') || 'light';
+<!-- Vendor JS Files -->
+<script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{ asset('assets/vendor/php-email-form/validate.js')}}"></script>
+<script src="{{ asset('assets/vendor/aos/aos.js')}}"></script>
+<script src="{{ asset('assets/vendor/typed.js/typed.umd.js')}}"></script>
+<script src="{{ asset('assets/vendor/purecounter/purecounter_vanilla.js')}}"></script>
+<script src="{{ asset('assets/vendor/waypoints/noframework.waypoints.js')}}"></script>
+<script src="{{ asset('assets/vendor/isotope-layout/isotope.pkgd.min.js')}}"></script>
+<script src="{{ asset('assets/vendor/imagesloaded/imagesloaded.pkgd.min.js')}}"></script>
+<script src="{{ asset('assets/vendor/glightbox/js/glightbox.min.js')}}"></script>
+<script src="{{ asset('assets/vendor/swiper/swiper-bundle.min.js')}}"></script>
 
-    function applyTheme(theme) {
-        htmlEl.setAttribute('data-bs-theme', theme);
-        localStorage.setItem('theme', theme);
-        document.getElementById('theme-icon').className =
-            theme === 'dark' ? 'ti ti-sun fs-18' : 'ti ti-moon fs-18';
-    }
-
-    applyTheme(stored);
-
-    document.getElementById('theme-toggle').addEventListener('click', () => {
-        applyTheme(htmlEl.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark');
-    });
-
-    // ── Smooth scroll ─────────────────────────────────────────────
-    document.querySelectorAll('a[href*="#"]').forEach(link => {
-        link.addEventListener('click', function (e) {
-            const url = new URL(this.href, window.location.href);
-            const isSamePage = url.pathname === window.location.pathname;
-            const hash = url.hash;
-            if (isSamePage && hash) {
-                const target = document.querySelector(hash);
-                if (target) {
-                    e.preventDefault();
-                    const navbar = document.getElementById('navbarNav');
-                    if (navbar.classList.contains('show')) {
-                        bootstrap.Collapse.getInstance(navbar)?.hide();
-                    }
-                    target.scrollIntoView({behavior: 'smooth', block: 'start'});
-                }
-            }
-        });
-    });
-
-    // ── Active nav on scroll ──────────────────────────────────────
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
-
-    sections.forEach(section => {
-        new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    navLinks.forEach(link => {
-                        link.classList.remove('fw-semibold');
-                        link.classList.add('text-muted');
-                        if (link.getAttribute('href')?.includes('#' + entry.target.id)) {
-                            link.classList.add('fw-semibold');
-                            link.classList.remove('text-muted');
-                        }
-                    });
-                }
-            });
-        }, {threshold: 0.4}).observe(section);
-    });
-</script>
-
-@stack('scripts')
+<!-- Main JS File -->
+<script src="{{ asset('assets/js/main.js')}}"></script>
 
 </body>
+
 </html>
+
