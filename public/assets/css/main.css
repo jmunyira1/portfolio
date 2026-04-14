@@ -139,7 +139,7 @@ h6 {
     left: 0;
     bottom: 0;
     padding: 0 15px;
-    width: 300px;
+    width: 200px;
     transition: all ease-in-out 0.3s;
     overflow-y: auto;
     z-index: 997;
@@ -484,7 +484,7 @@ section,
 .section {
     color: var(--default-color);
     background-color: var(--background-color);
-    padding: 60px 0;
+    padding: 30px 0;
     overflow: clip;
 }
 

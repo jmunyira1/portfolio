@@ -8,17 +8,12 @@
     <!-- Hero Section -->
     <section id="hero" class="hero section">
 
-        <div class="background-elements">
-            <div class="bg-circle circle-1"></div>
-            <div class="bg-circle circle-2"></div>
-        </div>
-
         <div class="hero-content">
 
             <div class="container">
-                <div class="row align-items-center">
+                <div class="row">
 
-                    <div class="col-lg-6" data-aos="fade-right" data-aos-delay="100">
+                    <div class="col-lg-6" data-aos="fade-right" data-aos-delay="25">
                         <div class="hero-text">
 
                             <h2>{{ $settings['name'] }}</h2>
@@ -28,22 +23,38 @@
                                                         data-typed-items="{{ $settings['tagline'] }}"></span>
                             </p>
                             <p class="description">{{ $settings['bio'] }}</p>
+                            <p class="socials p-3">
+                                @foreach($socials->where('is_primary', true) as $social)
+                                    <a href="{{ $social->url }}">
+                                        @if($social->icon)
+                                            <i class="{{ $social->icon }}"></i>
+                                        @endif
+                                        {{ $social->value }}
+                                    </a>
+                                    |
+                                @endforeach
 
+                            </p>
                             <div class="hero-actions">
                                 <a href="#portfolio" class="btn btn-primary">View My Work</a>
                                 <a href="#contact" class="btn btn-outline">Get In Touch</a>
                             </div>
 
                             <div class="social-links">
-                                <a href="#"><i class="bi bi-dribbble"></i></a>
-                                <a href="#"><i class="bi bi-behance"></i></a>
-                                <a href="#"><i class="bi bi-github"></i></a>
-                                <a href="#"><i class="bi bi-linkedin"></i></a>
+                                @foreach($socials->where('is_primary', false) as $social)
+                                    <a href="{{ $social->url }}" target="_blank"
+                                       title="{{ $social->label }}">
+
+                                        @if($social->icon)
+                                            <i class="{{ $social->icon }}"></i>
+                                        @endif
+                                    </a>
+                                @endforeach
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-lg-6" data-aos="fade-left" data-aos-delay="200">
+                    <div class="col-lg-6" data-aos="fade-left" data-aos-delay="25">
                         <div class="hero-visual">
                             <div class="profile-container">
                                 <div class="profile-background"></div>
@@ -59,173 +70,6 @@
 
     </section><!-- /Hero Section -->
 
-    <!-- About Section -->
-    <section id="about" class="about section">
-
-        <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-            <div class="row">
-                <div class="col-lg-5" data-aos="zoom-in" data-aos-delay="200">
-                    <div class="profile-card">
-                        <div class="profile-header">
-                            <div class="profile-image">
-                                <img src="{{ asset('storage/' . $settings['avatar']) }}" alt="{{ $settings['name'] }}"
-                                     class="img-fluid">
-                            </div>
-                            <div class="profile-badge">
-                                <i class="bi bi-check-circle-fill"></i>
-                            </div>
-                        </div>
-
-                        <div class="profile-content">
-                            <h3>{{ $settings['name'] }}</h3>
-                            <div class="contact-links">
-
-
-                                @foreach($socials->where('is_primary', true) as $social)
-                                    <a href="{{ $social->url }}" class="contact-item">
-                                        @if($social->icon)
-                                            <i class="{{ $social->icon }}"></i>
-                                        @endif
-                                        {{ $social->value }}
-                                    </a>
-                                @endforeach
-                                <a href="#" class="contact-item">
-                                    <i class="bi bi-geo-alt"></i>
-                                    {{ $settings['location']}}
-                                </a>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-7" data-aos="fade-left" data-aos-delay="300">
-                    <div class="about-content">
-                        <div class="section-header">
-                            <span class="badge-text">Get to Know Me</span>
-                            <h2>Passionate About Creating Digital Experiences</h2>
-                        </div>
-
-                        <div class="description">
-                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-                                laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi
-                                architecto beatae vitae dicta sunt explicabo.</p>
-
-                            <p>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam,
-                                nisi ut aliquid ex ea commodi consequatur.</p>
-                        </div>
-
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <div class="stat-number">150+</div>
-                                <div class="stat-label">Projects Completed</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-number">5+</div>
-                                <div class="stat-label">Years Experience</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-number">98%</div>
-                                <div class="stat-label">Client Satisfaction</div>
-                            </div>
-                        </div>
-
-                        <div class="details-grid">
-                            <div class="detail-row">
-                                <div class="detail-item">
-                                    <span class="detail-label">Specialization</span>
-                                    <span class="detail-value">UI/UX Design &amp; Development</span>
-                                </div>
-                                <div class="detail-item">
-                                    <span class="detail-label">Experience Level</span>
-                                    <span class="detail-value">Senior Professional</span>
-                                </div>
-                            </div>
-                            <div class="detail-row">
-                                <div class="detail-item">
-                                    <span class="detail-label">Education</span>
-                                    <span class="detail-value">Computer Science, MIT</span>
-                                </div>
-                                <div class="detail-item">
-                                    <span class="detail-label">Languages</span>
-                                    <span class="detail-value">English, Spanish, French</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="cta-section">
-                            @if(!empty($settings['resume_path']))
-                                <a href="{{ asset($settings['resume_path']) }}" target="_blank"
-                                   class="btn btn-primary">
-                                    <i class="bi bi-download"></i>
-                                    Download Resume
-                                </a>
-                            @endif
-
-                            <a href="#" class="btn btn-outline">
-                                <i class="bi bi-chat-dots"></i>
-                                Let's Talk
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-    </section><!-- /About Section -->
-
-    <!-- Stats Section -->
-    <section id="stats" class="stats section light-background">
-
-        <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-            <div class="row justify-content-center">
-                <div class="col-lg-10">
-                    <div class="stats-wrapper">
-                        <div class="stats-item" data-aos="zoom-in" data-aos-delay="150">
-                            <div class="icon-wrapper">
-                                <i class="bi bi-emoji-smile"></i>
-                            </div>
-                            <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1"
-                                  class="purecounter"></span>
-                            <p>Happy Clients</p>
-                        </div><!-- End Stats Item -->
-
-                        <div class="stats-item" data-aos="zoom-in" data-aos-delay="200">
-                            <div class="icon-wrapper">
-                                <i class="bi bi-journal-richtext"></i>
-                            </div>
-                            <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1"
-                                  class="purecounter"></span>
-                            <p>Projects</p>
-                        </div><!-- End Stats Item -->
-
-                        <div class="stats-item" data-aos="zoom-in" data-aos-delay="250">
-                            <div class="icon-wrapper">
-                                <i class="bi bi-headset"></i>
-                            </div>
-                            <span data-purecounter-start="0" data-purecounter-end="1463" data-purecounter-duration="1"
-                                  class="purecounter"></span>
-                            <p>Hours Of Support</p>
-                        </div><!-- End Stats Item -->
-
-                        <div class="stats-item" data-aos="zoom-in" data-aos-delay="300">
-                            <div class="icon-wrapper">
-                                <i class="bi bi-people"></i>
-                            </div>
-                            <span data-purecounter-start="0" data-purecounter-end="15" data-purecounter-duration="1"
-                                  class="purecounter"></span>
-                            <p>Hard Workers</p>
-                        </div><!-- End Stats Item -->
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-    </section><!-- /Stats Section -->
 
     <!-- Skills Section -->
     <section id="skills" class="skills section">
@@ -233,16 +77,15 @@
         <!-- Section Title -->
         <div class="container section-title" data-aos="fade-up">
             <h2>Skills</h2>
-            <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
         </div><!-- End Section Title -->
 
-        <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="container" data-aos="fade-up" data-aos-delay="25">
 
             <div class="row">
                 @foreach($categories as $category)
 
-                    <div class="col-lg-6">
-                        <div class="skills-category" data-aos="fade-up" data-aos-delay="200">
+                    <div class="col-lg-6  mb-3">
+                        <div class="skills-category" data-aos="fade-up" data-aos-delay="25">
                             <h3> @if($category->icon)
                                     <i class="{{ $category->icon }}"></i>
                                 @endif
@@ -286,156 +129,51 @@
 
         <!-- Section Title -->
         <div class="container section-title" data-aos="fade-up">
-            <h2>Resume</h2>
-            <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
-                consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat
-                sit in iste officiis commodi quidem hic quas.</p>
-        </div><!-- End Section Title -->
-
-        <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-            <div class="row gy-4">
-                <!-- Left column with summary and contact -->
-                <div class="col-lg-4">
-                    <div class="resume-side" data-aos="fade-right" data-aos-delay="100">
-                        <div class="profile-img mb-4">
-                            <img src="assets/img/profile/profile-square-2.webp" alt="Profile" class="img-fluid rounded">
-                        </div>
-
-                        <h3>Professional Summary</h3>
-                        <p>Driven software architect with expertise in developing scalable, high-performance enterprise
-                            solutions. Passionate about leveraging cutting-edge technologies to solve complex business
-                            challenges.</p>
-
-                        <h3 class="mt-4">Contact Information</h3>
-                        <ul class="contact-info list-unstyled">
-                            <li><i class="bi bi-geo-alt"></i> 742 Evergreen Terrace, Springfield, MA 02101</li>
-                            <li><i class="bi bi-envelope"></i> contact@example.com</li>
-                            <li><i class="bi bi-phone"></i> +1 (555) 123-4567</li>
-                            <li><i class="bi bi-linkedin"></i> linkedin.com/in/example</li>
-                        </ul>
-
-                        <div class="skills-animation mt-4">
-                            <h3>Technical Skills</h3>
-                            <div class="skill-item">
-                                <div class="d-flex justify-content-between">
-                                    <span>Web Development</span>
-                                    <span>95%</span>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="95" aria-valuemin="0"
-                                         aria-valuemax="100"></div>
-                                </div>
-                            </div>
-
-                            <div class="skill-item">
-                                <div class="d-flex justify-content-between">
-                                    <span>UI/UX Design</span>
-                                    <span>85%</span>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="85" aria-valuemin="0"
-                                         aria-valuemax="100"></div>
-                                </div>
-                            </div>
-
-                            <div class="skill-item">
-                                <div class="d-flex justify-content-between">
-                                    <span>Cloud Architecture</span>
-                                    <span>90%</span>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0"
-                                         aria-valuemax="100"></div>
-                                </div>
-                            </div>
-
-                            <div class="skill-item">
-                                <div class="d-flex justify-content-between">
-                                    <span>Project Management</span>
-                                    <span>80%</span>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="0"
-                                         aria-valuemax="100"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right column with experience and education -->
-                <div class="col-lg-8 ps-4 ps-lg-5">
-                    <!-- Experience Section -->
-                    <div class="resume-section" data-aos="fade-up">
-                        <h3><i class="bi bi-briefcase me-2"></i>Professional Experience</h3>
-
-                        <div class="resume-item">
-                            <h4>Senior Software Architect</h4>
-                            <h5>2022 - Present</h5>
-                            <p class="company"><i class="bi bi-building"></i> Tech Innovations Inc.</p>
-                            <ul>
-                                <li>Lead the architectural design and implementation of enterprise-scale applications
-                                </li>
-                                <li>Mentor team of 12 developers and establish technical best practices</li>
-                                <li>Drive adoption of microservices architecture and cloud-native solutions</li>
-                                <li>Reduce system downtime by 75% through improved architecture and monitoring</li>
-                            </ul>
-                        </div>
-
-                        <div class="resume-item">
-                            <h4>Lead Developer</h4>
-                            <h5>2019 - 2022</h5>
-                            <p class="company"><i class="bi bi-building"></i> Digital Solutions Corp.</p>
-                            <ul>
-                                <li>Spearheaded development of company's flagship product reaching 1M+ users</li>
-                                <li>Implemented CI/CD pipeline reducing deployment time by 60%</li>
-                                <li>Managed team of 8 developers across multiple projects</li>
-                                <li>Increased code test coverage from 45% to 90%</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Education Section -->
-                    <div class="resume-section" data-aos="fade-up" data-aos-delay="100">
-                        <h3><i class="bi bi-mortarboard me-2"></i>Education</h3>
-
-                        <div class="resume-item">
-                            <h4>Master of Science in Computer Science</h4>
-                            <h5>2017 - 2019</h5>
-                            <p class="company"><i class="bi bi-building"></i> Stanford University</p>
-                            <p>Specialized in Artificial Intelligence and Machine Learning. Graduated with honors.</p>
-                        </div>
-
-                        <div class="resume-item">
-                            <h4>Bachelor of Science in Software Engineering</h4>
-                            <h5>2013 - 2017</h5>
-                            <p class="company"><i class="bi bi-building"></i> MIT</p>
-                            <p>Dean's List all semesters. Led university's coding club.</p>
-                        </div>
-                    </div>
-
-                    <!-- Certifications Section -->
-                    <div class="resume-section" data-aos="fade-up" data-aos-delay="200">
-                        <h3><i class="bi bi-award me-2"></i>Certifications</h3>
-
-                        <div class="resume-item">
-                            <h4>AWS Certified Solutions Architect - Professional</h4>
-                            <h5>2023</h5>
-                        </div>
-
-                        <div class="resume-item">
-                            <h4>Google Cloud Professional Architect</h4>
-                            <h5>2022</h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <h2>Experience</h2>
 
         </div>
 
-    </section><!-- /Resume Section -->
+        <div class="container" data-aos="fade-up" data-aos-delay="25">
 
+
+            <div class="resume-section" data-aos="fade-up">
+                <h3><i class="bi bi-briefcase me-2"></i>Professional Experience</h3>
+
+
+                @foreach($experiences as $exp)
+
+                    <div class="resume-item">
+                        <h4>{{ $exp->title }}</h4>
+                        <h5>  {{ $exp->start_date->format('M Y') }}
+                            - {{ $exp->is_current ? 'Present' : $exp->end_date?->format('M Y') }}</h5>
+                        <p class="company"><i class="bi bi-building"></i>{{ $exp->client->name }}</p>
+                        <ul>
+                            @foreach($exp->responsibilities as $resp)
+                                <li>{{ $resp }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+
+                @endforeach
+
+
+            </div>
+            <!-- Education Section -->
+            <div class="resume-section" data-aos="fade-up" data-aos-delay="25">
+                <h3><i class="bi bi-mortarboard me-2"></i>Education</h3>
+                @foreach($education as $edu)
+                    <div class="resume-item">
+                        <h4>{{ $edu->degree }}</h4>
+                        <h5>       {{ $edu->start_year }}
+                            — {{ $edu->is_current ? 'Present' : $edu->end_year }}</h5>
+                        <p class="company"><i class="bi bi-building"></i> {{ $edu->institution }}
+                            ,{{ $edu->location }}</p>
+                        <p>{{ $edu->grade }}</p>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
     <!-- Portfolio Section -->
     <section id="portfolio" class="portfolio section">
 
@@ -445,13 +183,13 @@
             <p>Some of my projects</p>
         </div><!-- End Section Title -->
 
-        <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="container" data-aos="fade-up" data-aos-delay="25">
 
             <div class="isotope-layout" data-default-filter="*" data-layout="masonry" data-sort="original-order">
 
                 <div class="row">
                     <div class="col-lg-3 filter-sidebar">
-                        <div class="filters-wrapper" data-aos="fade-right" data-aos-delay="150">
+                        <div class="filters-wrapper" data-aos="fade-right" data-aos-delay="25">
                             <ul class="portfolio-filters isotope-filters">
                                 <li data-filter="*" class="filter-active">All Projects</li>
                                 <li data-filter=".filter-software">Software</li>
@@ -462,125 +200,64 @@
 
                     <div class="col-lg-9">
                         <div class="row gy-4 portfolio-container isotope-container" data-aos="fade-up"
-                             data-aos-delay="200">
+                             data-aos-delay="25">
 
-                            <div class="col-lg-6 col-md-6 portfolio-item isotope-item filter-photography">
-                                <div class="portfolio-wrap">
-                                    <img src="assets/img/portfolio/portfolio-portrait-1.webp" class="img-fluid"
-                                         alt="Portfolio Image" loading="lazy">
-                                    <div class="portfolio-info">
-                                        <div class="content">
-                                            <span class="category">Photography</span>
-                                            <h4>Capturing Moments</h4>
-                                            <div class="portfolio-links">
-                                                <a href="assets/img/portfolio/portfolio-portrait-1.webp"
-                                                   class="glightbox" title="Capturing Moments"><i
-                                                        class="bi bi-plus-lg"></i></a>
-                                                <a href="portfolio-details.html" title="More Details"><i
-                                                        class="bi bi-arrow-right"></i></a>
+
+                            @foreach($projects as $project)
+                                @php
+                                    $isSoftware = $project['source'] === 'repo';
+                                    $type       = $isSoftware ? 'software' : 'technical';
+                                @endphp
+
+                                <div class="col-lg-6 col-md-6 portfolio-item isotope-item filter-{{ $type }}">
+                                    <div class="portfolio-wrap">
+                                        <img src="{{ $project['cover'] }}"
+                                             alt="{{ $project['title'] }}" class="img-fluid"
+                                             loading="lazy">
+                                        <div class="portfolio-info">
+                                            <div class="content">
+                                                <span class="category">{{ $type }}</span>
+                                                <h4> {{ $project['title'] }}</h4>
+                                                <p class="text-muted fs-13 mb-2 flex-grow-1">
+                                                    {{ Str::limit($project['summary'], 100) }}
+                                                </p>
+                                                @if(!empty($project['tech']))
+                                                    <span>
+                                                        @foreach(array_slice($project['tech'], 0, 4) as $tech)
+                                                            <span>{{ $tech }}</span>
+                                                        @endforeach
+                                                        @if(count($project['tech']) > 4)
+                                                            <span>{{ count($project['tech']) - 4 }} </span>
+                                                        @endif
+                                                    </span>
+                                                @endif
+
+                                                <div class="portfolio-links">
+
+
+                                                    @if(!empty($project['live_url']))
+                                                        <a href="{{ $project['live_url'] }}" target="_blank"
+                                                           class="btn btn-outline-secondary btn-sm px-3 fs-12">
+                                                            Live <i class="ti ti-arrow-up-right fs-11"></i>
+                                                        </a>
+                                                    @endif
+                                                    @if(!empty($project['github_url']))
+                                                        <a href="{{ $project['github_url'] }}" target="_blank"
+                                                           class="btn btn-outline-secondary btn-sm px-3 fs-12">
+                                                            GitHub <i class="ti ti-arrow-up-right fs-11"></i>
+                                                        </a>
+                                                    @endif
+
+                                                    <a href="{{ route('projects.show', $project['slug']) }}"
+                                                       title="More Details"><i
+                                                            class="bi bi-arrow-right"></i></a>
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div><!-- End Portfolio Item -->
-
-                            <div class="col-lg-6 col-md-6 portfolio-item isotope-item filter-design">
-                                <div class="portfolio-wrap">
-                                    <img src="assets/img/portfolio/portfolio-2.webp" class="img-fluid"
-                                         alt="Portfolio Image" loading="lazy">
-                                    <div class="portfolio-info">
-                                        <div class="content">
-                                            <span class="category">Web Design</span>
-                                            <h4>Woodcraft Design</h4>
-                                            <div class="portfolio-links">
-                                                <a href="assets/img/portfolio/portfolio-2.webp" class="glightbox"
-                                                   title="Woodcraft Design"><i class="bi bi-plus-lg"></i></a>
-                                                <a href="portfolio-details.html" title="More Details"><i
-                                                        class="bi bi-arrow-right"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!-- End Portfolio Item -->
-
-                            <div class="col-lg-6 col-md-6 portfolio-item isotope-item filter-automotive">
-                                <div class="portfolio-wrap">
-                                    <img src="assets/img/portfolio/portfolio-portrait-2.webp" class="img-fluid"
-                                         alt="Portfolio Image" loading="lazy">
-                                    <div class="portfolio-info">
-                                        <div class="content">
-                                            <span class="category">Automotive</span>
-                                            <h4>Classic Beauty</h4>
-                                            <div class="portfolio-links">
-                                                <a href="assets/img/portfolio/portfolio-portrait-2.webp"
-                                                   class="glightbox" title="Classic Beauty"><i
-                                                        class="bi bi-plus-lg"></i></a>
-                                                <a href="portfolio-details.html" title="More Details"><i
-                                                        class="bi bi-arrow-right"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!-- End Portfolio Item -->
-
-                            <div class="col-lg-6 col-md-6 portfolio-item isotope-item filter-nature">
-                                <div class="portfolio-wrap">
-                                    <img src="assets/img/portfolio/portfolio-portrait-4.webp" class="img-fluid"
-                                         alt="Portfolio Image" loading="lazy">
-                                    <div class="portfolio-info">
-                                        <div class="content">
-                                            <span class="category">Nature</span>
-                                            <h4>Natural Growth</h4>
-                                            <div class="portfolio-links">
-                                                <a href="assets/img/portfolio/portfolio-portrait-4.webp"
-                                                   class="glightbox" title="Natural Growth"><i
-                                                        class="bi bi-plus-lg"></i></a>
-                                                <a href="portfolio-details.html" title="More Details"><i
-                                                        class="bi bi-arrow-right"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!-- End Portfolio Item -->
-
-                            <div class="col-lg-6 col-md-6 portfolio-item isotope-item filter-photography">
-                                <div class="portfolio-wrap">
-                                    <img src="assets/img/portfolio/portfolio-5.webp" class="img-fluid"
-                                         alt="Portfolio Image" loading="lazy">
-                                    <div class="portfolio-info">
-                                        <div class="content">
-                                            <span class="category">Photography</span>
-                                            <h4>Urban Stories</h4>
-                                            <div class="portfolio-links">
-                                                <a href="assets/img/portfolio/portfolio-5.webp" class="glightbox"
-                                                   title="Urban Stories"><i class="bi bi-plus-lg"></i></a>
-                                                <a href="portfolio-details.html" title="More Details"><i
-                                                        class="bi bi-arrow-right"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!-- End Portfolio Item -->
-
-                            <div class="col-lg-6 col-md-6 portfolio-item isotope-item filter-design">
-                                <div class="portfolio-wrap">
-                                    <img src="assets/img/portfolio/portfolio-6.webp" class="img-fluid"
-                                         alt="Portfolio Image" loading="lazy">
-                                    <div class="portfolio-info">
-                                        <div class="content">
-                                            <span class="category">Web Design</span>
-                                            <h4>Digital Experience</h4>
-                                            <div class="portfolio-links">
-                                                <a href="assets/img/portfolio/portfolio-6.webp" class="glightbox"
-                                                   title="Digital Experience"><i class="bi bi-plus-lg"></i></a>
-                                                <a href="portfolio-details.html" title="More Details"><i
-                                                        class="bi bi-arrow-right"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!-- End Portfolio Item -->
-
+                            @endforeach
                         </div><!-- End Portfolio Container -->
                     </div>
                 </div>
@@ -589,364 +266,40 @@
 
         </div>
 
-    </section><!-- /Portfolio Section -->
-
-    <!-- Services Section -->
-    <section id="services" class="services section">
-
-        <!-- Section Title -->
-        <div class="container section-title" data-aos="fade-up">
-            <h2>Services</h2>
-            <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-        </div><!-- End Section Title -->
-
-        <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-            <div class="service-header">
-                <div class="row align-items-center">
-                    <div class="col-lg-8 col-md-12">
-                        <div class="service-intro">
-                            <h2 class="service-heading">
-                                <div>Innovative business</div>
-                                <div><span>performance solutions</span></div>
-                            </h2>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-12">
-                        <div class="service-summary">
-                            <p>
-                                We integrate forward-thinking strategies, creative approaches, and state-of-the-art
-                                technologies to deliver exceptional customer experiences that drive growth and engage
-                                target markets.
-                            </p>
-                            <a href="services.html" class="service-btn">
-                                View All Services
-                                <i class="bi bi-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row justify-content-center">
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                    <div class="service-card position-relative z-1">
-                        <div class="service-icon">
-                            <i class="bi bi-palette"></i>
-                        </div>
-                        <a href="service-details.html"
-                           class="card-action d-flex align-items-center justify-content-center rounded-circle">
-                            <i class="bi bi-arrow-up-right"></i>
-                        </a>
-                        <h3>
-                            <a href="service-details.html">
-                                Creative <span>branding</span>
-                            </a>
-                        </h3>
-                        <p>
-                            Nulla facilisi. Maecenas eget magna neque. Suspendisse potenti. Curabitur eleifend nisi non
-                            magna vulputate, vel condimentum libero tempus. Proin consectetur feugiat diam.
-                        </p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="service-card position-relative z-1">
-                        <div class="service-icon">
-                            <i class="bi bi-gem"></i>
-                        </div>
-                        <a href="service-details.html"
-                           class="card-action d-flex align-items-center justify-content-center rounded-circle">
-                            <i class="bi bi-arrow-up-right"></i>
-                        </a>
-                        <h3>
-                            <a href="service-details.html">
-                                Design <span>systems</span>
-                            </a>
-                        </h3>
-                        <p>
-                            Praesent euismod varius tellus, vel bibendum nunc interdum at. Donec vehicula diam vel metus
-                            venenatis convallis. Aliquam erat volutpat. Etiam viverra magna sit amet.
-                        </p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                    <div class="service-card position-relative z-1">
-                        <div class="service-icon">
-                            <i class="bi bi-megaphone"></i>
-                        </div>
-                        <a href="service-details.html"
-                           class="card-action d-flex align-items-center justify-content-center rounded-circle">
-                            <i class="bi bi-arrow-up-right"></i>
-                        </a>
-                        <h3>
-                            <a href="service-details.html">
-                                Marketing <span>strategies</span>
-                            </a>
-                        </h3>
-                        <p>
-                            Vivamus tempor velit id magna dictum, sed fermentum nisi faucibus. Integer nec pretium
-                            sapien. Fusce tincidunt ligula et purus consequat, ac pellentesque nulla eleifend.
-                        </p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                    <div class="service-card position-relative z-1">
-                        <div class="service-icon">
-                            <i class="bi bi-code-slash"></i>
-                        </div>
-                        <a href="service-details.html"
-                           class="card-action d-flex align-items-center justify-content-center rounded-circle">
-                            <i class="bi bi-arrow-up-right"></i>
-                        </a>
-                        <h3>
-                            <a href="service-details.html">
-                                Digital <span>platforms</span>
-                            </a>
-                        </h3>
-                        <p>
-                            Cras fermentum odio eu feugiat malesuada. Vestibulum ante ipsum primis in faucibus orci
-                            luctus et accumsan cursus. Morbi placerat nulla vel nunc viverra accumsan.
-                        </p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="service-card position-relative z-1">
-                        <div class="service-icon">
-                            <i class="bi bi-graph-up"></i>
-                        </div>
-                        <a href="service-details.html"
-                           class="card-action d-flex align-items-center justify-content-center rounded-circle">
-                            <i class="bi bi-arrow-up-right"></i>
-                        </a>
-                        <h3>
-                            <a href="service-details.html">
-                                Growth <span>acceleration</span>
-                            </a>
-                        </h3>
-                        <p>
-                            Aenean vel augue vel nisi bibendum posuere. Phasellus in lacus quis urna sodales dignissim.
-                            Duis aliquam libero eget risus facilisis. Quisque eget libero vel nisl fringilla.
-                        </p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                    <div class="service-card position-relative z-1">
-                        <div class="service-icon">
-                            <i class="bi bi-camera-video"></i>
-                        </div>
-                        <a href="service-details.html"
-                           class="card-action d-flex align-items-center justify-content-center rounded-circle">
-                            <i class="bi bi-arrow-up-right"></i>
-                        </a>
-                        <h3>
-                            <a href="service-details.html">
-                                Media <span>solutions</span>
-                            </a>
-                        </h3>
-                        <p>
-                            Etiam efficitur lacus in diam finibus, nec ultrices est sagittis. Maecenas elementum magna
-                            sed risus faucibus, nec commodo purus facilisis. Vestibulum accumsan magna.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-    </section><!-- /Services Section -->
-
-    <!-- Testimonials Section -->
-    <section id="testimonials" class="testimonials section light-background">
-
-        <!-- Section Title -->
-        <div class="container section-title" data-aos="fade-up">
-            <h2>Testimonials</h2>
-            <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-        </div><!-- End Section Title -->
-
-        <div class="container">
-
-            <div class="testimonial-masonry">
-
-                <div class="testimonial-item" data-aos="fade-up">
-                    <div class="testimonial-content">
-                        <div class="quote-pattern">
-                            <i class="bi bi-quote"></i>
-                        </div>
-                        <p>Implementing innovative strategies has revolutionized our approach to market challenges and
-                            competitive positioning.</p>
-                        <div class="client-info">
-                            <div class="client-image">
-                                <img src="assets/img/person/person-f-7.webp" alt="Client">
-                            </div>
-                            <div class="client-details">
-                                <h3>Rachel Bennett</h3>
-                                <span class="position">Strategy Director</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="testimonial-item highlight" data-aos="fade-up" data-aos-delay="100">
-                    <div class="testimonial-content">
-                        <div class="quote-pattern">
-                            <i class="bi bi-quote"></i>
-                        </div>
-                        <p>Exceptional service delivery and innovative solutions have transformed our business
-                            operations, leading to remarkable growth and enhanced customer satisfaction across all
-                            touchpoints.</p>
-                        <div class="client-info">
-                            <div class="client-image">
-                                <img src="assets/img/person/person-m-7.webp" alt="Client">
-                            </div>
-                            <div class="client-details">
-                                <h3>Daniel Morgan</h3>
-                                <span class="position">Chief Innovation Officer</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="testimonial-item" data-aos="fade-up" data-aos-delay="200">
-                    <div class="testimonial-content">
-                        <div class="quote-pattern">
-                            <i class="bi bi-quote"></i>
-                        </div>
-                        <p>Strategic partnership has enabled seamless digital transformation and operational
-                            excellence.</p>
-                        <div class="client-info">
-                            <div class="client-image">
-                                <img src="assets/img/person/person-f-8.webp" alt="Client">
-                            </div>
-                            <div class="client-details">
-                                <h3>Emma Thompson</h3>
-                                <span class="position">Digital Lead</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="testimonial-item" data-aos="fade-up" data-aos-delay="300">
-                    <div class="testimonial-content">
-                        <div class="quote-pattern">
-                            <i class="bi bi-quote"></i>
-                        </div>
-                        <p>Professional expertise and dedication have significantly improved our project delivery
-                            timelines and quality metrics.</p>
-                        <div class="client-info">
-                            <div class="client-image">
-                                <img src="assets/img/person/person-m-8.webp" alt="Client">
-                            </div>
-                            <div class="client-details">
-                                <h3>Christopher Lee</h3>
-                                <span class="position">Technical Director</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="testimonial-item highlight" data-aos="fade-up" data-aos-delay="400">
-                    <div class="testimonial-content">
-                        <div class="quote-pattern">
-                            <i class="bi bi-quote"></i>
-                        </div>
-                        <p>Collaborative approach and industry expertise have revolutionized our product development
-                            cycle, resulting in faster time-to-market and increased customer engagement levels.</p>
-                        <div class="client-info">
-                            <div class="client-image">
-                                <img src="assets/img/person/person-f-9.webp" alt="Client">
-                            </div>
-                            <div class="client-details">
-                                <h3>Olivia Carter</h3>
-                                <span class="position">Product Manager</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="testimonial-item" data-aos="fade-up" data-aos-delay="500">
-                    <div class="testimonial-content">
-                        <div class="quote-pattern">
-                            <i class="bi bi-quote"></i>
-                        </div>
-                        <p>Innovative approach to user experience design has significantly enhanced our platform's
-                            engagement metrics and customer retention rates.</p>
-                        <div class="client-info">
-                            <div class="client-image">
-                                <img src="assets/img/person/person-m-13.webp" alt="Client">
-                            </div>
-                            <div class="client-details">
-                                <h3>Nathan Brooks</h3>
-                                <span class="position">UX Director</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
-    </section><!-- /Testimonials Section -->
-
+    </section>
     <!-- Contact Section -->
     <section id="contact" class="contact section">
 
         <!-- Section Title -->
         <div class="container section-title" data-aos="fade-up">
             <h2>Contact</h2>
-            <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+            <p> Have a project in mind or just want to say hi? Fill in the form or reach me at</p>
         </div><!-- End Section Title -->
 
         <div class="container">
-
             <div class="row g-4 g-lg-5">
-                <div class="col-lg-5">
-                    <div class="info-box">
-                        <h3>Contact Info</h3>
-                        <p>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ante ipsum
-                            primis.</p>
+                <div class="col-3">
+                    <h3>Socials</h3>
 
-                        <div class="info-item">
-                            <div class="icon-box">
-                                <i class="bi bi-geo-alt"></i>
-                            </div>
-                            <div class="content">
-                                <h4>Our Location</h4>
-                                <p>A108 Adam Street</p>
-                                <p>New York, NY 535022</p>
-                            </div>
-                        </div>
+                    <div class="social-links d-flex flex-column gap-3">
+                        @foreach($socials as $social)
+                            <a href="{{ $social->url }}" target="_blank"
+                               title="{{ $social->label }}"
+                               class="d-inline-flex align-items-center justify-content-center rounded-circle border border-2 p-2"
+                               style="width:50px; height:50px;">
 
-                        <div class="info-item">
-                            <div class="icon-box">
-                                <i class="bi bi-telephone"></i>
-                            </div>
-                            <div class="content">
-                                <h4>Phone Number</h4>
-                                <p>+1 5589 55488 55</p>
-                                <p>+1 6678 254445 41</p>
-                            </div>
-                        </div>
-
-                        <div class="info-item">
-                            <div class="icon-box">
-                                <i class="bi bi-envelope"></i>
-                            </div>
-                            <div class="content">
-                                <h4>Email Address</h4>
-                                <p>info@example.com</p>
-                                <p>contact@example.com</p>
-                            </div>
-                        </div>
+                                @if($social->icon)
+                                    <i class="{{ $social->icon }}"></i>
+                                @endif
+                            </a>
+                        @endforeach
                     </div>
                 </div>
+                <div class="col-9">
 
-                <div class="col-lg-7">
                     <div class="contact-form">
                         <h3>Get In Touch</h3>
-                        <p>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ante ipsum
-                            primis.</p>
+                        <p> Have a project in mind or just want to say hi? Fill in the form or reach me at</p>
 
                         <form method="POST" action="{{ route('contact.send') }}" class="php-email-form">
                             @csrf
@@ -955,12 +308,12 @@
 
                                 <div class="col-md-6">
                                     <input type="text" name="name" class="form-control" placeholder="Your Name"
-                                           required="">
+                                           value="{{ old('name') }}" required>
                                 </div>
 
                                 <div class="col-md-6 ">
                                     <input type="email" class="form-control" name="email" placeholder="Your Email"
-                                           required="">
+                                           value="{{ old('email') }}" required>
                                 </div>
 
                                 <div class="col-12">

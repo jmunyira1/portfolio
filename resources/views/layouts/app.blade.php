@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+@php use App\Models\Setting; @endphp
+@php use App\Models\Social; @endphp
+    <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -39,45 +41,14 @@
     <div class="header-container d-flex flex-column align-items-start">
         <nav id="navmenu" class="navmenu">
             <ul>
-                <li><a href="#hero" class="active"><i class="bi bi-house navicon"></i>Home</a></li>
-                <li><a href="#about"><i class="bi bi-person navicon"></i> About</a></li>
-                <li><a href="#resume"><i class="bi bi-file-earmark-text navicon"></i> Resume</a></li>
-                <li><a href="#portfolio"><i class="bi bi-images navicon"></i> Portfolio</a></li>
-                <li><a href="#services"><i class="bi bi-hdd-stack navicon"></i> Services</a></li>
-                <li class="dropdown"><a href="#"><i class="bi bi-menu-button navicon"></i> <span>Dropdown</span> <i
-                            class="bi bi-chevron-down toggle-dropdown"></i></a>
-                    <ul>
-                        <li><a href="#">Dropdown 1</a></li>
-                        <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i
-                                    class="bi bi-chevron-down toggle-dropdown"></i></a>
-                            <ul>
-                                <li><a href="#">Deep Dropdown 1</a></li>
-                                <li><a href="#">Deep Dropdown 2</a></li>
-                                <li><a href="#">Deep Dropdown 3</a></li>
-                                <li><a href="#">Deep Dropdown 4</a></li>
-                                <li><a href="#">Deep Dropdown 5</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#">Dropdown 2</a></li>
-                        <li><a href="#">Dropdown 3</a></li>
-                        <li><a href="#">Dropdown 4</a></li>
-                    </ul>
-                </li>
-                <li><a href="#contact"><i class="bi bi-envelope navicon"></i> Contact</a></li>
+                <li><a href="#hero" class="active"><i class="bi bi-house-fill navicon"></i>Home</a></li>
+                <li><a href="#skills"><i class="bi bi-tools navicon"></i> Skills</a></li>
+                <li><a href="#resume"><i class="bi bi-file-earmark-person navicon"></i> Resume</a></li>
+                <li><a href="#portfolio"><i class="bi bi-grid navicon"></i> Portfolio</a></li>
+                <li><a href="#contact"><i class="bi bi-chat-dots navicon"></i> Contact</a></li>
             </ul>
         </nav>
 
-        <div class="social-links text-center">
-            @foreach($socials->where('is_primary', false) as $social)
-                <a href="{{ $social->url }}" target="_blank"
-                   title="{{ $social->label }}">
-
-                    @if($social->icon)
-                        <i class="{{ $social->icon }}"></i>
-                    @endif
-                </a>
-            @endforeach
-        </div>
 
     </div>
 
@@ -92,18 +63,14 @@
 <footer id="footer" class="footer position-relative">
 
     <div class="container">
-        <div class="copyright text-center ">
-            <p>© <span>Copyright</span> <strong class="px-1 sitename">iPortfolio</strong>
-                <span>All Rights Reserved</span></p>
+        <div class="copyright">
+            <p class="mb-0">
+                &copy; {{ date('Y') }} {{ Setting::get('name', 'Portfolio') }}
+            </p>
+
+
         </div>
-        <div class="credits">
-            <!-- All the links in the footer should remain intact. -->
-            <!-- You can delete the links only if you've purchased the pro version. -->
-            <!-- Licensing information: https://bootstrapmade.com/license/ -->
-            <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
-            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> | <a
-                href="https://bootstrapmade.com/tools/">DevTools</a>
-        </div>
+
     </div>
 
 </footer>
