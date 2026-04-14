@@ -201,91 +201,75 @@
                     <div class="col-lg-9">
                         <div class="row gy-4 portfolio-container isotope-container" data-aos="fade-up"
                              data-aos-delay="25">
-
-
                             @foreach($projects as $project)
                                 @php
                                     $isSoftware = $project['source'] === 'repo';
                                     $type       = $isSoftware ? 'software' : 'technical';
-                                    $techColors = ['software' => '#7F77DD', 'technical' => '#1D9E75'];
-                                    $color      = $techColors[$type];
+                                    $initials   = strtoupper(substr($project['title'], 0, 2));
                                 @endphp
 
                                 <div class="col-lg-6 col-md-6 portfolio-item isotope-item filter-{{ $type }}">
-                                    <div class="portfolio-wrap">
+                                    <div class="card h-100 bg-transparent border-secondary">
 
-                                        {{-- Image with graceful fallback --}}
-                                        <div class="portfolio-img-wrap">
-                                            <img
-                                                src="{{ $project['cover'] ?? '' }}"
-                                                alt="{{ $project['title'] }}"
-                                                class="img-fluid portfolio-cover"
-                                                loading="lazy"
-                                                onerror="
-                        this.style.display='none';
-                        this.nextElementSibling.style.display='flex';
-                    "
-                                            >
-                                            <div class="portfolio-placeholder" style="display:none;">
-                    <span class="placeholder-initial">
-                        {{ strtoupper(substr($project['title'], 0, 1)) }}
-                    </span>
-                                                <span class="placeholder-label">{{ $project['title'] }}</span>
-                                            </div>
+                                        <img src="{{ $project['cover'] ?? '' }}"
+                                             alt="{{ $project['title'] }}"
+                                             class="card-img-top"
+                                             style="height: 200px; object-fit: cover;"
+                                             loading="lazy"
+                                             onerror="this.style.display='none'; document.getElementById('placeholder-{{ $loop->index }}').style.display='flex';">
+
+                                        <div id="placeholder-{{ $loop->index }}"
+                                             class="align-items-center justify-content-center bg-secondary"
+                                             style="height: 200px; font-size: 2rem; font-weight: 600; display: none;">
+                                            {{ $initials }}
                                         </div>
 
-                                        <div class="portfolio-info">
-                                            <div class="content">
-                                                <span class="category badge-{{ $type }}">{{ $type }}</span>
-                                                <h4>{{ $project['title'] }}</h4>
-                                                <p class="text-muted fs-13 mb-2 flex-grow-1">
-                                                    {{ Str::limit($project['summary'], 100) }}
-                                                </p>
+                                        <div class="card-body d-flex flex-column">
+                                            <span class="badge  mb-2 align-self-start">{{ $type }}</span>
+                                            <h5 class="card-title text-white">{{ $project['title'] }}</h5>
+                                            <p class="card-text text-white small flex-grow-1 text-white">
+                                                {{ Str::limit($project['summary'], 100) }}
+                                            </p>
 
-                                                @if(!empty($project['tech']))
-                                                    <div class="tech-tags">
-                                                        @foreach(array_slice($project['tech'], 0, 4) as $tech)
-                                                            <span class="tech-tag">{{ $tech }}</span>
-                                                        @endforeach
-                                                        @if(count($project['tech']) > 4)
-                                                            <span class="tech-tag tech-tag--more">
-                                    +{{ count($project['tech']) - 4 }} more
-                                </span>
-                                                        @endif
-                                                    </div>
-                                                @endif
-
-                                                <div class="portfolio-links">
-                                                    @if(!empty($project['live_url']))
-                                                        <a href="{{ $project['live_url'] }}" target="_blank"
-                                                           class="btn btn-outline-secondary btn-sm px-3 fs-12">
-                                                            Live <i class="ti ti-arrow-up-right fs-11"></i>
-                                                        </a>
+                                            @if(!empty($project['tech']))
+                                                <div class="mb-3">
+                                                    @foreach(array_slice($project['tech'], 0, 4) as $tech)
+                                                        <span
+                                                            class="badge bg-dark text-light border border-secondary me-1">{{ $tech }}</span>
+                                                    @endforeach
+                                                    @if(count($project['tech']) > 4)
+                                                        <span
+                                                            class="badge bg-dark text-secondary border border-secondary">+{{ count($project['tech']) - 4 }} more</span>
                                                     @endif
-                                                    @if(!empty($project['github_url']))
-                                                        <a href="{{ $project['github_url'] }}" target="_blank"
-                                                           class="btn btn-outline-secondary btn-sm px-3 fs-12">
-                                                            GitHub <i class="ti ti-arrow-up-right fs-11"></i>
-                                                        </a>
-                                                    @endif
-                                                    <a href="{{ route('projects.show', $project['slug']) }}"
-                                                       title="More Details">
-                                                        <i class="bi bi-arrow-right"></i>
-                                                    </a>
                                                 </div>
+                                            @endif
+
+                                            <div class="d-flex gap-2 align-items-center flex-wrap mt-auto">
+                                                @if(!empty($project['live_url']))
+                                                    <a href="{{ $project['live_url'] }}" target="_blank"
+                                                       class="btn btn-outline-secondary btn-sm">
+                                                        Live <i class="ti ti-arrow-up-right"></i>
+                                                    </a>
+                                                @endif
+                                                @if(!empty($project['github_url']))
+                                                    <a href="{{ $project['github_url'] }}" target="_blank"
+                                                       class="btn btn-outline-secondary btn-sm">
+                                                        GitHub <i class="ti ti-arrow-up-right"></i>
+                                                    </a>
+                                                @endif
+                                                <a href="{{ route('projects.show', $project['slug']) }}"
+                                                   class="btn btn-sm btn-outline-light ms-auto">
+                                                    Details <i class="bi bi-arrow-right"></i>
+                                                </a>
                                             </div>
                                         </div>
 
                                     </div>
                                 </div>
                             @endforeach
-                        </div><!-- End Portfolio Container -->
+                        </div>
+
                     </div>
-                </div>
-
-            </div>
-
-        </div>
 
     </section>
     <!-- Contact Section -->
