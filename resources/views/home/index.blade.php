@@ -207,34 +207,55 @@
                                 @php
                                     $isSoftware = $project['source'] === 'repo';
                                     $type       = $isSoftware ? 'software' : 'technical';
+                                    $techColors = ['software' => '#7F77DD', 'technical' => '#1D9E75'];
+                                    $color      = $techColors[$type];
                                 @endphp
 
                                 <div class="col-lg-6 col-md-6 portfolio-item isotope-item filter-{{ $type }}">
                                     <div class="portfolio-wrap">
-                                        <img src="{{ $project['cover'] }}"
-                                             alt="{{ $project['title'] }}" class="img-fluid"
-                                             loading="lazy">
+
+                                        {{-- Image with graceful fallback --}}
+                                        <div class="portfolio-img-wrap">
+                                            <img
+                                                src="{{ $project['cover'] ?? '' }}"
+                                                alt="{{ $project['title'] }}"
+                                                class="img-fluid portfolio-cover"
+                                                loading="lazy"
+                                                onerror="
+                        this.style.display='none';
+                        this.nextElementSibling.style.display='flex';
+                    "
+                                            >
+                                            <div class="portfolio-placeholder" style="display:none;">
+                    <span class="placeholder-initial">
+                        {{ strtoupper(substr($project['title'], 0, 1)) }}
+                    </span>
+                                                <span class="placeholder-label">{{ $project['title'] }}</span>
+                                            </div>
+                                        </div>
+
                                         <div class="portfolio-info">
                                             <div class="content">
-                                                <span class="category">{{ $type }}</span>
-                                                <h4> {{ $project['title'] }}</h4>
+                                                <span class="category badge-{{ $type }}">{{ $type }}</span>
+                                                <h4>{{ $project['title'] }}</h4>
                                                 <p class="text-muted fs-13 mb-2 flex-grow-1">
                                                     {{ Str::limit($project['summary'], 100) }}
                                                 </p>
+
                                                 @if(!empty($project['tech']))
-                                                    <span>
+                                                    <div class="tech-tags">
                                                         @foreach(array_slice($project['tech'], 0, 4) as $tech)
-                                                            <span>{{ $tech }}</span>
+                                                            <span class="tech-tag">{{ $tech }}</span>
                                                         @endforeach
                                                         @if(count($project['tech']) > 4)
-                                                            <span>{{ count($project['tech']) - 4 }} </span>
+                                                            <span class="tech-tag tech-tag--more">
+                                    +{{ count($project['tech']) - 4 }} more
+                                </span>
                                                         @endif
-                                                    </span>
+                                                    </div>
                                                 @endif
 
                                                 <div class="portfolio-links">
-
-
                                                     @if(!empty($project['live_url']))
                                                         <a href="{{ $project['live_url'] }}" target="_blank"
                                                            class="btn btn-outline-secondary btn-sm px-3 fs-12">
@@ -247,14 +268,14 @@
                                                             GitHub <i class="ti ti-arrow-up-right fs-11"></i>
                                                         </a>
                                                     @endif
-
                                                     <a href="{{ route('projects.show', $project['slug']) }}"
-                                                       title="More Details"><i
-                                                            class="bi bi-arrow-right"></i></a>
-
+                                                       title="More Details">
+                                                        <i class="bi bi-arrow-right"></i>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                             @endforeach
